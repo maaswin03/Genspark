@@ -54,9 +54,9 @@ public class TripGeneratorJob
         {
             try
             {
-                Console.WriteLine($"[TripGeneratorJob] Running at {DateTime.UtcNow:u}");
+                Console.WriteLine($"[TripGeneratorJob] Running at {DateTime.Now:u}");
                 await ProcessSchedulesAsync(cancellationToken);
-                Console.WriteLine($"[TripGeneratorJob] Finished at {DateTime.UtcNow:u}");
+                Console.WriteLine($"[TripGeneratorJob] Finished at {DateTime.Now:u}");
 
                 // Re-run every hour (not just at midnight) — same approach as SeatLockExpiryJob
                 await Task.Delay(TimeSpan.FromHours(1), cancellationToken);
@@ -80,7 +80,7 @@ public class TripGeneratorJob
         {
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-            var today = DateOnly.FromDateTime(DateTime.UtcNow);
+            var today = DateOnly.FromDateTime(DateTime.Now);
 
             // Find all active schedules
             var activeSchedules = await context.TripSchedules
@@ -105,14 +105,14 @@ public class TripGeneratorJob
                 }
 
                 // Check if a trip already exists for this schedule today
-                var dayStartUtc = DateTime.SpecifyKind(today.ToDateTime(TimeOnly.MinValue), DateTimeKind.Utc);
-                var nextDayStartUtc = DateTime.SpecifyKind(today.AddDays(1).ToDateTime(TimeOnly.MinValue), DateTimeKind.Utc);
+                var dayStart = DateTime.SpecifyKind(today.ToDateTime(TimeOnly.MinValue), DateTimeKind.Unspecified);
+                var nextDayStart = DateTime.SpecifyKind(today.AddDays(1).ToDateTime(TimeOnly.MinValue), DateTimeKind.Unspecified);
 
                 var existingTrip = await context.Trips
                     .AnyAsync(
                         x => x.ScheduleId == schedule.Id &&
-                             x.DepartureTime >= dayStartUtc &&
-                             x.DepartureTime < nextDayStartUtc,
+                             x.DepartureTime >= dayStart &&
+                             x.DepartureTime < nextDayStart,
                         cancellationToken);
 
                 if (existingTrip)
@@ -121,8 +121,8 @@ public class TripGeneratorJob
                 }
 
                 // Create the trip for today
-                var tripDateTime = DateTime.SpecifyKind(today.ToDateTime(TimeOnly.FromTimeSpan(schedule.DepartureTime)), DateTimeKind.Utc);
-                var arrivalDateTime = DateTime.SpecifyKind(today.ToDateTime(TimeOnly.FromTimeSpan(schedule.ArrivalTime)), DateTimeKind.Utc);
+                var tripDateTime = DateTime.SpecifyKind(today.ToDateTime(TimeOnly.FromTimeSpan(schedule.DepartureTime)), DateTimeKind.Unspecified);
+                var arrivalDateTime = DateTime.SpecifyKind(today.ToDateTime(TimeOnly.FromTimeSpan(schedule.ArrivalTime)), DateTimeKind.Unspecified);
 
                 // Handle case where arrival time is on the next day (e.g., departure 10 PM, arrival 2 AM)
                 if (arrivalDateTime <= tripDateTime)
