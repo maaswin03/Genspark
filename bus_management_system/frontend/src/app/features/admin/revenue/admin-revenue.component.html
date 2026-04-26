@@ -1,0 +1,86 @@
+<section class="admin-page">
+  <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap mb-3">
+    <div>
+      <h2 class="h4 fw-bold mb-1">Revenue</h2>
+      <p class="text-secondary mb-0">Financial overview for admin and operator payouts.</p>
+    </div>
+    <div class="toolbar-actions">
+      <input
+        class="form-control"
+        type="month"
+        [(ngModel)]="selectedMonth"
+        (ngModelChange)="onMonthChange()"
+        aria-label="Filter by month"
+      />
+      <!-- <button class="btn btn-danger" type="button" (click)="exportCsv()" [disabled]="isLoading || operatorRows.length === 0">Export CSV</button> -->
+    </div>
+  </div>
+
+  <div *ngIf="message" class="alert" [class.alert-success]="messageTone === 'success'" [class.alert-danger]="messageTone === 'danger'">
+    {{ message }}
+  </div>
+
+  <div *ngIf="isLoading" class="alert alert-light border d-flex align-items-center gap-2 mb-3">
+    <div class="spinner-border spinner-border-sm text-danger" role="status" aria-label="Loading revenue"></div>
+    <span>Loading revenue data...</span>
+  </div>
+
+  <div class="summary-grid mb-3">
+    <article class="summary-card">
+      <p class="card-label">Gross Revenue</p>
+      <h3>{{ summary.totalRevenue | currency:'INR':'symbol':'1.0-0' }}</h3>
+    </article>
+
+    <article class="summary-card">
+      <p class="card-label">Platform Earnings</p>
+      <h3>{{ summary.totalPlatformFee | currency:'INR':'symbol':'1.0-0' }}</h3>
+    </article>
+
+    <article class="summary-card">
+      <p class="card-label">Operator Payouts</p>
+      <h3>{{ summary.totalOperatorEarning | currency:'INR':'symbol':'1.0-0' }}</h3>
+    </article>
+  </div>
+
+  <section class="panel mb-3">
+    <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap mb-2">
+      <h3 class="h6 fw-bold mb-0">Monthly revenue (last 12 months view)</h3>
+      <small class="text-secondary">Selected month highlighted</small>
+    </div>
+    <div class="chart-wrap">
+      <canvas
+        baseChart
+        [type]="'bar'"
+        [data]="chartData"
+        [options]="chartOptions"
+      ></canvas>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h3 class="h6 fw-bold mb-2">Per-operator revenue</h3>
+    <app-admin-table-shell>
+      <thead>
+        <tr>
+          <th>Operator Name</th>
+          <th>Total Bookings</th>
+          <th>Gross Revenue</th>
+          <th>Platform Fee</th>
+          <th>Net Payout</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of operatorRows">
+          <td class="fw-semibold">{{ row.companyName || 'N/A' }}</td>
+          <td>{{ row.totalTransactions }}</td>
+          <td>{{ row.totalRevenue | currency:'INR':'symbol':'1.0-0' }}</td>
+          <td>{{ row.totalPlatformFee | currency:'INR':'symbol':'1.0-0' }}</td>
+          <td>{{ row.totalOperatorEarning | currency:'INR':'symbol':'1.0-0' }}</td>
+        </tr>
+        <tr *ngIf="!isLoading && operatorRows.length === 0">
+          <td colspan="5" class="text-center py-4 text-secondary">No operator revenue data available.</td>
+        </tr>
+      </tbody>
+    </app-admin-table-shell>
+  </section>
+</section>

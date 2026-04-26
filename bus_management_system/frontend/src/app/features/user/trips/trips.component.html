@@ -1,0 +1,235 @@
+<main class="tr-page">
+  <div class="container-xl tr-layout">
+
+    <!-- ══ PAGE HEADER ═══════════════════════════════════════════════════ -->
+    <div class="tr-header">
+      <div>
+        <span class="tr-eyebrow">Search Results</span>
+        <h1 class="tr-title">{{ searchTitle }}</h1>
+        <p class="tr-subtitle">{{ filteredTrips.length }} bus{{ filteredTrips.length === 1 ? '' : 'es' }} found &mdash; select a trip to choose your seat.</p>
+      </div>
+      <a routerLink="/home" class="tr-back-btn">&#8592; Change Search</a>
+    </div>
+
+    <!-- ══ RE-SEARCH STRIP ════════════════════════════════════════════════ -->
+    <div class="tr-search-bar">
+      <form [formGroup]="searchForm" (ngSubmit)="searchTrips()" autocomplete="off" novalidate>
+        <div class="tr-search-fields">
+
+          <!-- FROM -->
+          <div class="tr-field" style="flex: 2;">
+            <label class="tr-field__label">From</label>
+            <div class="tr-field__wrap">
+              <input
+                type="text"
+                class="tr-field__input"
+                placeholder="Departure city"
+                formControlName="sourceQuery"
+                (focus)="openSourceDropdown()"
+                (blur)="closeSourceDropdown()"
+                autocomplete="off"
+              />
+            </div>
+            <div *ngIf="sourceDropdownOpen" class="tr-dropdown">
+              <div *ngIf="loadingLocations" class="tr-dropdown__state">Loading…</div>
+              <button *ngFor="let loc of sourceSuggestions; trackBy: trackByLocationId"
+                type="button" class="tr-dropdown__item" (mousedown)="selectSource(loc)">
+                <span class="tr-dropdown__city">{{ loc.name }}</span>
+                <span class="tr-dropdown__region">{{ loc.city }}, {{ loc.state }}</span>
+              </button>
+              <div *ngIf="!loadingLocations && sourceSuggestions.length === 0" class="tr-dropdown__state">No results</div>
+            </div>
+          </div>
+
+          <!-- SWAP -->
+          <button type="button" class="tr-swap" (click)="swapLocations()" aria-label="Swap">&#8644;</button>
+
+          <!-- TO -->
+          <div class="tr-field" style="flex: 2;">
+            <label class="tr-field__label">To</label>
+            <div class="tr-field__wrap">
+              <input
+                type="text"
+                class="tr-field__input"
+                placeholder="Destination city"
+                formControlName="destinationQuery"
+                (focus)="openDestinationDropdown()"
+                (blur)="closeDestinationDropdown()"
+                autocomplete="off"
+              />
+            </div>
+            <div *ngIf="destinationDropdownOpen" class="tr-dropdown">
+              <div *ngIf="loadingLocations" class="tr-dropdown__state">Loading…</div>
+              <button *ngFor="let loc of destinationSuggestions; trackBy: trackByLocationId"
+                type="button" class="tr-dropdown__item" (mousedown)="selectDestination(loc)">
+                <span class="tr-dropdown__city">{{ loc.name }}</span>
+                <span class="tr-dropdown__region">{{ loc.city }}, {{ loc.state }}</span>
+              </button>
+              <div *ngIf="!loadingLocations && destinationSuggestions.length === 0" class="tr-dropdown__state">No results</div>
+            </div>
+          </div>
+
+          <!-- DATE -->
+          <div class="tr-field" style="flex: 1.2;">
+            <label class="tr-field__label">Date</label>
+            <div class="tr-field__wrap">
+              <input type="date" class="tr-field__input" formControlName="travelDate" />
+            </div>
+          </div>
+
+          <!-- SEARCH -->
+          <button type="submit" class="tr-search-btn">Search</button>
+
+        </div>
+        <div *ngIf="errorMessage" class="tr-error-msg">{{ errorMessage }}</div>
+      </form>
+    </div>
+
+    <!-- ══ BODY: FILTERS + RESULTS ════════════════════════════════════════ -->
+    <div class="tr-body">
+
+      <!-- Filters sidebar -->
+      <aside class="tr-filters" [class.tr-filters--hidden]="!filtersVisible" [formGroup]="filterForm">
+        <div class="tr-filters__header">
+          <span class="tr-filters__title">Filters</span>
+          <button type="button" class="tr-filters__reset"
+            (click)="filterForm.reset({ busType: 'all', departureRange: 'all', maxPrice: maxPrice, sortBy: 'recommended' })">
+            Reset
+          </button>
+        </div>
+
+        <div class="tr-filter-group">
+          <label class="tr-filter-group__label">Bus Type</label>
+          <div class="tr-pill-group">
+            <label *ngFor="let opt of busTypeOptions" class="tr-pill" [class.tr-pill--active]="filterForm.controls.busType.value === opt.value">
+              <input type="radio" formControlName="busType" [value]="opt.value" hidden />
+              {{ opt.label }}
+            </label>
+          </div>
+        </div>
+
+        <div class="tr-filter-group">
+          <label class="tr-filter-group__label">Departure Time</label>
+          <select class="tr-select" formControlName="departureRange">
+            <option *ngFor="let opt of departureRanges" [value]="opt.value">{{ opt.label }}</option>
+          </select>
+        </div>
+
+        <div class="tr-filter-group">
+          <div class="tr-filter-group__label-row">
+            <label class="tr-filter-group__label">Max Price</label>
+            <span class="tr-filter-group__value">&#8377;{{ currentPriceCap | number:'1.0-0' }}</span>
+          </div>
+          <input type="range" class="tr-range" [min]="0" [max]="maxPrice" [value]="currentPriceCap" (input)="onPriceChange($event)" />
+          <div class="tr-range-labels">
+            <span>&#8377;0</span>
+            <span>&#8377;{{ maxPrice | number:'1.0-0' }}</span>
+          </div>
+        </div>
+
+        <div class="tr-filter-group">
+          <label class="tr-filter-group__label">Sort By</label>
+          <select class="tr-select" formControlName="sortBy">
+            <option *ngFor="let opt of sortOptions" [value]="opt.value">{{ opt.label }}</option>
+          </select>
+        </div>
+      </aside>
+
+      <!-- Results area -->
+      <section class="tr-results">
+
+        <!-- Filter toggle (mobile) -->
+        <div class="tr-results__toolbar">
+          <button type="button" class="tr-toggle-filters-btn" (click)="toggleFilters()">
+            {{ filtersVisible ? 'Hide Filters' : 'Show Filters' }}
+          </button>
+          <span class="tr-results__count">{{ filteredTrips.length }} result{{ filteredTrips.length === 1 ? '' : 's' }}</span>
+        </div>
+
+        <!-- Loading -->
+        <div *ngIf="isLoading" class="tr-state-box">
+          <div class="tr-spinner"></div>
+          <div class="tr-state-box__text">Searching for buses…</div>
+        </div>
+
+        <!-- Error -->
+        <div *ngIf="!isLoading && errorMessage" class="tr-state-box tr-state-box--error">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+          </svg>
+          {{ errorMessage }}
+        </div>
+
+        <!-- Empty -->
+        <div *ngIf="!isLoading && !errorMessage && filteredTrips.length === 0 && trips.length === 0" class="tr-state-box tr-state-box--empty">
+          <div class="tr-state-box__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="36" height="36">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/>
+            </svg>
+          </div>
+          <div class="tr-state-box__title">No buses found</div>
+          <div class="tr-state-box__text">Try a different date or route.</div>
+        </div>
+
+        <!-- No matches after filter -->
+        <div *ngIf="!isLoading && !errorMessage && filteredTrips.length === 0 && trips.length > 0" class="tr-state-box tr-state-box--empty">
+          <div class="tr-state-box__title">No buses match your filters</div>
+          <div class="tr-state-box__text">Try resetting the filters on the left.</div>
+        </div>
+
+        <!-- Trip cards -->
+        <div class="tr-list">
+          <div *ngFor="let trip of filteredTrips; trackBy: trackByTripId" class="tr-card">
+
+            <!-- Left: operator + route info -->
+            <div class="tr-card__left">
+              <div class="tr-card__top">
+                <span class="tr-card__operator">{{ trip.operatorName }}</span>
+                <span class="tr-card__bus-num">{{ trip.busNumber }}</span>
+                <span class="tr-card__type-badge">{{ getBusTypeLabel(trip.busType) }}</span>
+              </div>
+              <div class="tr-card__route">{{ trip.routeName }}</div>
+
+              <div class="tr-card__timeline">
+                <div class="tr-card__time-block">
+                  <span class="tr-card__time">{{ formatTripTime(trip.departureTime) }}</span>
+                  <span class="tr-card__time-label">Departure</span>
+                </div>
+                <div class="tr-card__duration-line">
+                  <div class="tr-card__duration-dot"></div>
+                  <div class="tr-card__duration-track"></div>
+                  <span class="tr-card__duration-text">{{ getDurationLabel(trip) }}</span>
+                  <div class="tr-card__duration-track"></div>
+                  <div class="tr-card__duration-dot"></div>
+                </div>
+                <div class="tr-card__time-block tr-card__time-block--right">
+                  <span class="tr-card__time">{{ formatTripTime(trip.arrivalTime) }}</span>
+                  <span class="tr-card__time-label">Arrival</span>
+                </div>
+              </div>
+
+              <div class="tr-card__seats">
+                <svg viewBox="0 0 16 16" fill="currentColor" width="13" height="13">
+                  <path d="M3 2a1 1 0 011-1h.5a1 1 0 011 1v3.5h5V2a1 1 0 011-1h.5a1 1 0 011 1v10a1 1 0 01-1 1H4a1 1 0 01-1-1V2zm7 5.5H6V13h4V7.5z"/>
+                </svg>
+                <span><strong>{{ trip.availableSeats }}</strong> seats available</span>
+              </div>
+            </div>
+
+            <!-- Right: price + action -->
+            <div class="tr-card__right">
+              <div class="tr-card__price-label">Starting from</div>
+              <div class="tr-card__price">&#8377;{{ trip.baseFare | number:'1.0-0' }}</div>
+              <button type="button" class="tr-select-btn" (click)="selectTrip(trip)">
+                Select Seats
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+  </div>
+</main>

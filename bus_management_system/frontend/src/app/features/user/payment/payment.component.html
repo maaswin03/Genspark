@@ -1,0 +1,148 @@
+<main class="bk-page">
+  <div class="container-xl bk-layout">
+
+    <!-- Loading -->
+    <div class="bk-loading" *ngIf="isLoading">
+      <div class="bk-spinner"></div>
+      <span>Loading booking details…</span>
+    </div>
+
+    <ng-container *ngIf="!isLoading">
+      <!-- Header -->
+      <div class="bk-header">
+        <div>
+          <span class="bk-eyebrow">Step 3 of 3 — Payment</span>
+          <h1 class="bk-title">Complete Your Booking</h1>
+          <p class="bk-subtitle">Booking #{{ bookingId }} &nbsp;·&nbsp; {{ booking?.routeName }}</p>
+        </div>
+        <div class="bk-header__right">
+          <span class="bk-status-badge" [class.bk-status-badge--paid]="isPaid"
+            [class.bk-status-badge--failed]="isFailed">
+            {{ isPaid ? 'Paid' : isFailed ? 'Failed' : 'Pending' }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Alerts -->
+      <div *ngIf="errorMessage" class="bk-alert bk-alert--error">
+        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" style="flex-shrink:0">
+          <path fill-rule="evenodd"
+            d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+            clip-rule="evenodd" />
+        </svg>
+        {{ errorMessage }}
+      </div>
+      <div *ngIf="successMessage" class="bk-alert bk-alert--success">
+        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" style="flex-shrink:0">
+          <path fill-rule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+            clip-rule="evenodd" />
+        </svg>
+        {{ successMessage }}
+      </div>
+
+      <div class="bk-body">
+        <!-- Left: Payment methods + action -->
+        <section class="bk-main">
+
+          <!-- Method picker -->
+          <div class="bk-card" *ngIf="!isPaid">
+            <h3 class="bk-card__title">Choose Payment Method</h3>
+            <div class="pay-methods">
+              <button type="button" class="pay-method" *ngFor="let method of paymentMethods"
+                [class.pay-method--active]="selectedMethod === method.value" (click)="selectedMethod = method.value"
+                [disabled]="isInitiating">
+                <div class="pay-method__label">{{ method.label }}</div>
+                <div class="pay-method__sub">{{ method.subtitle }}</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Pay / retry action -->
+          <div class="bk-card" *ngIf="isPending">
+            <h3 class="bk-card__title">Proceed to Pay</h3>
+            <p class="bk-card__help">Click below to complete payment for ₹{{ totalPayable | number:'1.0-0' }}.</p>
+            <div class="bk-actions">
+              <button type="button" class="bk-btn bk-btn--primary" (click)="initiatePayment()"
+                [disabled]="isInitiating">
+                <svg *ngIf="isInitiating" class="bk-spinner-sm" viewBox="0 0 24 24" fill="none" width="15" height="15">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" stroke-dasharray="60"
+                    stroke-dashoffset="20" />
+                </svg>
+                {{ isInitiating ? 'Processing…' : 'Pay ₹' + (totalPayable | number:'1.0-0') }}
+              </button>
+              <button type="button" class="bk-btn bk-btn--ghost" (click)="retryStatusCheck()"
+                [disabled]="isInitiating">Refresh Status</button>
+            </div>
+          </div>
+
+          <div class="bk-card" *ngIf="isFailed">
+            <h3 class="bk-card__title">Payment Failed</h3>
+            <p class="bk-card__help">No amount was captured. You can retry with the same or another method.</p>
+            <button type="button" class="bk-btn bk-btn--primary" (click)="initiatePayment()" [disabled]="isInitiating">
+              Retry Payment
+            </button>
+          </div>
+
+          <div class="bk-card bk-card--success" *ngIf="isPaid">
+            <div class="bk-success-icon">✓</div>
+            <h3 class="bk-card__title">Payment Successful!</h3>
+            <p class="bk-card__help">Your booking is confirmed and seats are reserved.</p>
+            <button type="button" class="bk-btn bk-btn--primary" (click)="goToBookings()">View My Bookings</button>
+          </div>
+
+          <!-- Passenger breakdown -->
+          <div class="bk-card" *ngIf="booking && booking.seats.length > 0">
+            <h3 class="bk-card__title">Passengers</h3>
+            <div class="bk-passengers">
+              <div class="bk-passenger" *ngFor="let seat of booking.seats">
+                <div class="bk-passenger__avatar">{{ seat.passengerName?.charAt(0) || 'P' }}</div>
+                <div class="bk-passenger__info">
+                  <div class="bk-passenger__name">{{ seat.passengerName }}</div>
+                  <div class="bk-passenger__meta">Seat {{ seat.seatNumber }} · Age {{ seat.passengerAge }} · {{
+                    formatGender(seat.passengerGender) }}</div>
+                </div>
+                <div class="bk-passenger__fare">₹{{ seat.amountPaid | number:'1.0-0' }}</div>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- Right: Booking summary -->
+        <aside class="bk-sidebar">
+          <div class="bk-card">
+            <h3 class="bk-card__title">Booking Summary</h3>
+            <div class="bk-summary">
+              <div class="bk-summary__row">
+                <span class="bk-summary__label">Route</span>
+                <span class="bk-summary__value">{{ booking?.routeName || '—' }}</span>
+              </div>
+              <div class="bk-summary__row">
+                <span class="bk-summary__label">Departure</span>
+                <span class="bk-summary__value">{{ booking?.departureTime | date:'d MMM · h:mm a' }}</span>
+              </div>
+              <div class="bk-summary__row">
+                <span class="bk-summary__label">Seats</span>
+                <span class="bk-summary__value">{{ booking?.seats?.length || 0 }}</span>
+              </div>
+              <div class="bk-summary__row">
+                <span class="bk-summary__label">Seat Fare</span>
+                <span class="bk-summary__value">₹{{ seatFare | number:'1.0-0' }}</span>
+              </div>
+              <div class="bk-summary__row" *ngIf="booking?.platformFee">
+                <span class="bk-summary__label">Platform Fee</span>
+                <span class="bk-summary__value">₹{{ booking?.platformFee | number:'1.2-2' }}</span>
+              </div>
+              <div class="bk-summary__row bk-summary__row--total">
+                <span class="bk-summary__label">Total Payable</span>
+                <span class="bk-summary__value bk-summary__value--big">₹{{ totalPayable | number:'1.0-0' }}</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </ng-container>
+
+  </div>
+</main>

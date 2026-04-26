@@ -1,0 +1,31 @@
+:host {
+  display: block;
+}
+
+.admin-page {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.filter-pills {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.stops-wrap {
+  padding: 0.45rem 0;
+}
+
+.stop-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.2fr auto;
+  gap: 0.55rem;
+  align-items: end;
+}
+
+@media (max-width: 767px) {
+  .stop-row {
+    grid-template-columns: 1fr;
+  }
+}

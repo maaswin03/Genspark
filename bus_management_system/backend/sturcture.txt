@@ -1,0 +1,91 @@
+BusManagementSystem/
+│
+├── Controllers/                # Handles HTTP requests
+│   ├── AuthController.cs
+│   ├── UserController.cs
+│   ├── OperatorController.cs
+│   ├── BusController.cs
+│   ├── TripController.cs
+│   ├── BookingController.cs
+│   ├── PaymentController.cs
+│
+├── Models/
+│   ├── Entities/              # DB models (EF Core tables)
+│   │   ├── User.cs
+│   │   ├── Role.cs
+│   │   ├── Operator.cs
+│   │   ├── Bus.cs
+│   │   ├── Seat.cs
+│   │   ├── Trip.cs
+│   │   ├── TripSeat.cs
+│   │   ├── Booking.cs
+│   │   ├── BookingSeat.cs
+│   │   ├── Passenger.cs
+│   │   ├── Payment.cs
+│   │   ├── Transaction.cs
+│   │
+│   ├── DTOs/                  # Request & Response models
+│   │   ├── Auth/
+│   │   │   ├── LoginRequest.cs
+│   │   │   ├── RegisterRequest.cs
+│   │   │   ├── AuthResponse.cs
+│   │   │
+│   │   ├── Booking/
+│   │   │   ├── CreateBookingRequest.cs
+│   │   │   ├── BookingResponse.cs
+│   │   │
+│   │   ├── Trip/
+│   │   │   ├── TripSearchRequest.cs
+│   │   │   ├── TripResponse.cs
+│   │
+│   ├── Enums/                 # C# enums (mirror DB enums)
+│   │   ├── BookingStatus.cs
+│   │   ├── SeatStatus.cs
+│   │   ├── PaymentStatus.cs
+│   │   ├── ApprovalStatus.cs
+│
+├── Data/
+│   ├── AppDbContext.cs        # EF Core DbContext
+│   ├── Configurations/        # Fluent API configs (clean DB mapping)
+│   │   ├── UserConfig.cs
+│   │   ├── BookingConfig.cs
+│   │   ├── TripConfig.cs
+│   │   ├── TripSeatConfig.cs
+│
+├── Services/
+│   ├── Interfaces/            # Contracts
+│   │   ├── IAuthService.cs
+│   │   ├── IBookingService.cs
+│   │   ├── ITripService.cs
+│   │   ├── IPaymentService.cs
+│   │
+│   ├── Implementations/       # Business logic
+│   │   ├── AuthService.cs
+│   │   ├── BookingService.cs
+│   │   ├── TripService.cs
+│   │   ├── PaymentService.cs
+│
+├── Repositories/              # DB access layer (optional but clean)
+│   ├── Interfaces/
+│   │   ├── IBookingRepository.cs
+│   │   ├── ITripRepository.cs
+│   │
+│   ├── Implementations/
+│   │   ├── BookingRepository.cs
+│   │   ├── TripRepository.cs
+│
+├── Middleware/                # Cross-cutting concerns
+│   ├── ExceptionMiddleware.cs
+│   ├── LoggingMiddleware.cs
+│
+├── Helpers/                   # Utility classes
+│   ├── JwtHelper.cs
+│   ├── PasswordHasher.cs
+│   ├── DateTimeHelper.cs
+│
+├── Config/                    # App configs
+│   ├── JwtSettings.cs
+│   ├── AppSettings.cs
+│        
+├── Program.cs
+├── appsettings.json

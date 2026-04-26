@@ -1,0 +1,218 @@
+<main class="pd-page">
+  <div class="container-xl pd-layout">
+
+    <!-- ══ HEADER ═════════════════════════════════════════════════════════ -->
+    <div class="pd-header">
+      <div>
+        <span class="pd-eyebrow">Step 2 of 3 — Passenger Details</span>
+        <h1 class="pd-title">Add Passenger Information</h1>
+        <p class="pd-subtitle" *ngIf="trip">
+          {{ trip.routeName }}&nbsp;&nbsp;·&nbsp;&nbsp;{{ formatDate(trip.departureTime) }}&nbsp;&nbsp;·&nbsp;&nbsp;Departs {{ formatTime(trip.departureTime) }}
+        </p>
+      </div>
+
+      <div class="pd-header__right">
+        <!-- Seats badge -->
+        <div class="pd-badge pd-badge--seats" *ngIf="selectedSeatNumbers().length > 0">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="13" height="13">
+            <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+          </svg>
+          {{ selectedSeatNumbers().join(', ') }}
+        </div>
+
+        <!-- Timer -->
+        <div class="pd-timer" [class.pd-timer--danger]="timerIsLow" *ngIf="reservationLockedUntil">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+          </svg>
+          Hold: <strong>{{ timerLabel }}</strong>
+        </div>
+
+        <a routerLink=".." class="pd-back-btn">&#8592; Back</a>
+      </div>
+    </div>
+
+    <!-- ══ ALERTS ══════════════════════════════════════════════════════════ -->
+    <div *ngIf="errorMessage" class="pd-alert pd-alert--error">
+      <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" style="flex-shrink:0">
+        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+      </svg>
+      {{ errorMessage }}
+    </div>
+
+    <div *ngIf="successMessage" class="pd-alert pd-alert--success">
+      <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" style="flex-shrink:0">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+      </svg>
+      {{ successMessage }}
+    </div>
+
+    <!-- ══ MAIN BODY ═══════════════════════════════════════════════════════ -->
+    <div class="pd-body" *ngIf="trip">
+
+      <!-- Left: Passenger form -->
+      <section class="pd-main">
+        <form [formGroup]="form" (ngSubmit)="submitBooking()">
+
+          <!-- Passenger cards -->
+          <div formArrayName="passengers" class="pd-passenger-list">
+            <div
+              *ngFor="let passenger of passengers.controls; let i = index"
+              [formGroupName]="i"
+              class="pd-card pd-passenger-card"
+            >
+              <!-- Card header -->
+              <div class="pd-passenger-card__header">
+                <div class="pd-passenger-card__num">{{ i + 1 }}</div>
+                <div>
+                  <div class="pd-passenger-card__label">Passenger {{ i + 1 }}</div>
+                  <div class="pd-passenger-card__seat">Seat {{ passengerSeatLabel(i) }}</div>
+                </div>
+              </div>
+
+              <!-- Fields -->
+              <div class="pd-fields">
+                <!-- Name -->
+                <div class="pd-field pd-field--wide">
+                  <label class="pd-field__label">Full Name</label>
+                  <input
+                    type="text"
+                    class="pd-field__input"
+                    [class.pd-field__input--error]="passenger.get('name')?.invalid && passenger.get('name')?.touched"
+                    formControlName="name"
+                    placeholder="Enter passenger name"
+                    autocomplete="name"
+                  />
+                  <span class="pd-field__error" *ngIf="passenger.get('name')?.invalid && passenger.get('name')?.touched">
+                    Name is required (2–100 characters)
+                  </span>
+                </div>
+
+                <!-- Age -->
+                <div class="pd-field">
+                  <label class="pd-field__label">Age</label>
+                  <input
+                    type="number"
+                    class="pd-field__input"
+                    [class.pd-field__input--error]="passenger.get('age')?.invalid && passenger.get('age')?.touched"
+                    formControlName="age"
+                    placeholder="Age"
+                    min="1"
+                    max="120"
+                  />
+                  <span class="pd-field__error" *ngIf="passenger.get('age')?.invalid && passenger.get('age')?.touched">
+                    Valid age (1–120)
+                  </span>
+                </div>
+
+                <!-- Gender -->
+                <div class="pd-field">
+                  <label class="pd-field__label">Gender</label>
+                  <select class="pd-field__input pd-field__select" formControlName="gender">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <button
+            type="submit"
+            class="pd-btn pd-btn--primary pd-btn--full"
+            [disabled]="!canSubmit"
+          >
+            <svg *ngIf="isSubmitting" class="pd-btn-spinner" viewBox="0 0 24 24" fill="none" width="16" height="16">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" stroke-dasharray="60" stroke-dashoffset="20"/>
+            </svg>
+            {{ isSubmitting ? 'Confirming Booking…' : 'Confirm Booking' }}
+            <svg *ngIf="!isSubmitting" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+              <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+          </button>
+        </form>
+      </section>
+
+      <!-- Right: Booking summary sidebar -->
+      <aside class="pd-sidebar">
+
+        <!-- Trip Summary -->
+        <div class="pd-card">
+          <h3 class="pd-card__title">Booking Summary</h3>
+          <div class="pd-summary">
+            <div class="pd-summary__row">
+              <span class="pd-summary__label">Route</span>
+              <span class="pd-summary__value">{{ trip.routeName }}</span>
+            </div>
+            <div class="pd-summary__row">
+              <span class="pd-summary__label">Date</span>
+              <span class="pd-summary__value">{{ formatDate(trip.departureTime) }}</span>
+            </div>
+            <div class="pd-summary__row">
+              <span class="pd-summary__label">Departure</span>
+              <span class="pd-summary__value">{{ formatTime(trip.departureTime) }}</span>
+            </div>
+            <div class="pd-summary__row">
+              <span class="pd-summary__label">Arrival</span>
+              <span class="pd-summary__value">{{ formatTime(trip.arrivalTime) }}</span>
+            </div>
+            <div class="pd-summary__row">
+              <span class="pd-summary__label">Operator</span>
+              <span class="pd-summary__value">{{ trip.operatorName }}</span>
+            </div>
+            <div class="pd-summary__row">
+              <span class="pd-summary__label">Bus</span>
+              <span class="pd-summary__value">{{ trip.busNumber }}</span>
+            </div>
+            <div class="pd-summary__row">
+              <span class="pd-summary__label">Seats</span>
+              <span class="pd-summary__value">{{ selectedSeatNumbers().join(', ') }}</span>
+            </div>
+            <div class="pd-summary__row pd-summary__row--total">
+              <span class="pd-summary__label">Total</span>
+              <span class="pd-summary__value pd-summary__value--big">&#8377;{{ totalAmount | number:'1.0-0' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stops info -->
+        <div class="pd-card">
+          <h3 class="pd-card__title">Boarding & Dropping</h3>
+
+          <div class="pd-stop">
+            <div class="pd-stop__icon pd-stop__icon--board">B</div>
+            <div>
+              <div class="pd-stop__label">Boarding Point</div>
+              <div class="pd-stop__name" *ngIf="boardingPoint">{{ boardingPoint.name }}</div>
+              <div class="pd-stop__loc" *ngIf="boardingPoint">{{ boardingPoint.locationName }}</div>
+              <div class="pd-stop__name pd-stop__name--empty" *ngIf="!boardingPoint">Not set</div>
+            </div>
+          </div>
+
+          <div class="pd-stop-divider"></div>
+
+          <div class="pd-stop">
+            <div class="pd-stop__icon pd-stop__icon--drop">D</div>
+            <div>
+              <div class="pd-stop__label">Dropping Point</div>
+              <div class="pd-stop__name" *ngIf="droppingPoint">{{ droppingPoint.name }}</div>
+              <div class="pd-stop__loc" *ngIf="droppingPoint">{{ droppingPoint.locationName }}</div>
+              <div class="pd-stop__name pd-stop__name--empty" *ngIf="!droppingPoint">Not set</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timer card -->
+        <div class="pd-card pd-timer-card" [class.pd-timer-card--danger]="timerIsLow">
+          <div class="pd-timer-card__label">Reservation Expires In</div>
+          <div class="pd-timer-card__value">{{ timerLabel }}</div>
+          <p class="pd-timer-card__hint">Complete the booking before the timer runs out.</p>
+        </div>
+
+      </aside>
+    </div>
+
+  </div>
+</main>

@@ -1,0 +1,94 @@
+<section class="admin-page">
+  <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap mb-3">
+    <div>
+      <h2 class="h4 fw-bold mb-1">Platform Fee</h2>
+      <p class="text-secondary mb-0">Manage fee percentage applied to future bookings.</p>
+    </div>
+  </div>
+
+  <div *ngIf="message" class="alert" [class.alert-success]="messageTone === 'success'" [class.alert-danger]="messageTone === 'danger'">
+    {{ message }}
+  </div>
+
+  <div *ngIf="isLoading" class="alert alert-light border d-flex align-items-center gap-2 mb-3">
+    <div class="spinner-border spinner-border-sm text-danger" role="status" aria-label="Loading platform fee"></div>
+    <span>Loading platform fee settings...</span>
+  </div>
+
+  <section class="current-fee-card mb-3">
+    <p class="text-secondary mb-1">Current Active Fee</p>
+    <h3 class="fee-value mb-0">{{ currentFee?.feeValue ?? 0 }}%</h3>
+  </section>
+
+  <section class="panel mb-3">
+    <h3 class="h6 fw-bold mb-2">Set New Fee</h3>
+    <form [formGroup]="feeForm" novalidate class="fee-form">
+      <div>
+        <label class="form-label">Percentage (0 to 100)</label>
+        <input class="form-control" type="number" min="0" max="100" formControlName="feeValue" />
+        <div class="text-danger small mt-1" *ngIf="feeForm.controls.feeValue.invalid && feeForm.controls.feeValue.touched">
+          Enter a valid percentage between 0 and 100.
+        </div>
+      </div>
+
+      <div class="preview-card">
+        <p class="mb-1 text-secondary">Preview</p>
+        <p class="mb-0">On ₹1000 booking → platform earns <strong>{{ feeValuePreview | currency:'INR':'symbol':'1.0-0' }}</strong></p>
+      </div>
+
+      <div>
+        <button class="btn btn-danger" type="button" (click)="openConfirmModal()" [disabled]="isSaving">
+          Set Fee
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <section class="panel">
+    <h3 class="h6 fw-bold mb-2">Fee History</h3>
+    <app-admin-table-shell>
+      <thead>
+        <tr>
+          <th>Percentage</th>
+          <th>Date Set</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let fee of feeHistory">
+          <td class="fw-semibold">{{ fee.feeValue }}%</td>
+          <td>{{ fee.updatedAt | date:'dd MMM, y, hh:mm a' }}</td>
+          <td>
+            <app-admin-badge [text]="fee.isActive ? 'Active' : 'Inactive'" [tone]="fee.isActive ? 'success' : 'dark'"></app-admin-badge>
+          </td>
+        </tr>
+        <tr *ngIf="!isLoading && feeHistory.length === 0">
+          <td colspan="3" class="text-center py-4 text-secondary">No fee history available.</td>
+        </tr>
+      </tbody>
+    </app-admin-table-shell>
+  </section>
+</section>
+
+<app-admin-modal
+  [open]="isConfirmModalOpen"
+  title="Confirm Fee Update"
+  subtitle="This will affect all future bookings."
+  (closed)="closeConfirmModal()"
+>
+  <p class="mb-3">
+    You are about to set platform fee to <strong>{{ feeForm.controls.feeValue.value ?? 0 }}%</strong>.
+    This will affect all future bookings.
+  </p>
+
+  <div class="d-flex justify-content-end gap-2">
+    <button class="btn btn-outline-secondary" type="button" (click)="closeConfirmModal()" [disabled]="isSaving">Cancel</button>
+    <button class="btn btn-danger" type="button" (click)="submitFee()" [disabled]="isSaving">
+      <span *ngIf="!isSaving">Confirm</span>
+      <span *ngIf="isSaving" class="d-inline-flex align-items-center gap-2">
+        <span class="spinner-border spinner-border-sm"></span>
+        Saving...
+      </span>
+    </button>
+  </div>
+</app-admin-modal>

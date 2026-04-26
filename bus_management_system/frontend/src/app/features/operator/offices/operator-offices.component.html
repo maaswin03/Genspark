@@ -1,0 +1,93 @@
+<section class="offices-page">
+  <header class="page-head">
+    <div>
+      <h2 class="h4 fw-bold mb-1">Offices</h2>
+      <p class="text-secondary mb-0">Manage branch offices and maintain one head office at a time.</p>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn btn-danger" (click)="openCreateOffice()" [disabled]="isLoading || isSubmitting">Add Office</button>
+    </div>
+  </header>
+
+  <div *ngIf="message" class="alert" [ngClass]="messageTone === 'success' ? 'alert-success' : 'alert-danger'">{{ message }}</div>
+
+  <div *ngIf="isLoading" class="loading-box">
+    <span class="spinner-border spinner-border-sm text-danger" aria-hidden="true"></span>
+    <span>Loading offices...</span>
+  </div>
+
+  <section *ngIf="!isLoading" class="table-card">
+    <app-admin-table-shell>
+      <thead>
+        <tr>
+          <th>Location</th>
+          <th>Address</th>
+          <th>Status</th>
+          <th class="text-end">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let office of offices; trackBy: trackByOfficeId">
+          <td class="fw-semibold">{{ office.locationName }}</td>
+          <td>{{ office.address }}</td>
+          <td>
+            <app-admin-badge [text]="office.isHeadOffice ? 'Head Office' : 'Branch'" [tone]="office.isHeadOffice ? 'info' : 'dark'"></app-admin-badge>
+          </td>
+          <td class="text-end">
+            <button type="button" class="btn btn-sm btn-outline-dark" (click)="openEditOffice(office)" [disabled]="isSubmitting">Edit</button>
+          </td>
+        </tr>
+        <tr *ngIf="offices.length === 0">
+          <td colspan="4" class="text-center text-secondary py-4">No offices found. Add your first office.</td>
+        </tr>
+      </tbody>
+    </app-admin-table-shell>
+  </section>
+</section>
+
+<app-admin-modal
+  [open]="showOfficeModal"
+  [title]="editingOfficeId ? 'Edit Office' : 'Add Office'"
+  subtitle="Office details"
+  (closed)="closeModal()"
+  maxWidth="620px"
+>
+  <form [formGroup]="officeForm" (ngSubmit)="submitOffice()" class="office-form">
+    <label class="form-label fw-semibold" for="officeLocation">Location</label>
+    <select id="officeLocation" class="form-select mb-2" formControlName="locationId" [disabled]="editingOfficeId !== null">
+      <option [ngValue]="0">Select location</option>
+      <option *ngFor="let location of locations" [ngValue]="location.id">
+        {{ location.name }} ({{ location.city }}, {{ location.state }})
+      </option>
+    </select>
+    <div *ngIf="officeForm.controls.locationId.invalid && officeForm.controls.locationId.touched" class="validation-text">
+      Location is required.
+    </div>
+
+    <label class="form-label fw-semibold mt-2" for="officeAddress">Address</label>
+    <textarea
+      id="officeAddress"
+      rows="3"
+      class="form-control mb-2"
+      formControlName="address"
+      maxlength="500"
+      placeholder="Enter office address"
+    ></textarea>
+    <div *ngIf="officeForm.controls.address.invalid && officeForm.controls.address.touched" class="validation-text">
+      Address is required (max 500 characters).
+    </div>
+
+    <div class="form-check mt-3 mb-3">
+      <input id="isHeadOffice" type="checkbox" class="form-check-input" formControlName="isHeadOffice" />
+      <label for="isHeadOffice" class="form-check-label">Mark as head office</label>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn btn-outline-secondary" (click)="closeModal()" [disabled]="isSubmitting">Cancel</button>
+      <button type="submit" class="btn btn-danger" [disabled]="isSubmitting">
+        <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+        {{ editingOfficeId ? 'Save Changes' : 'Create Office' }}
+      </button>
+    </div>
+  </form>
+</app-admin-modal>

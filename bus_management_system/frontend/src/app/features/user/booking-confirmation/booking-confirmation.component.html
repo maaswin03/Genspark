@@ -1,0 +1,104 @@
+<main class="bk-page">
+  <div class="container-xl bk-layout">
+
+    <!-- Loading -->
+    <div class="bk-loading" *ngIf="isLoading">
+      <div class="bk-spinner"></div>
+      <span>Preparing your ticket…</span>
+    </div>
+
+    <ng-container *ngIf="!isLoading">
+      <!-- Error -->
+      <div *ngIf="errorMessage" class="bk-alert bk-alert--error">
+        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" style="flex-shrink:0"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+        {{ errorMessage }}
+      </div>
+
+      <ng-container *ngIf="booking">
+        <!-- Header -->
+        <div class="bk-header">
+          <div>
+            <span class="bk-eyebrow bk-eyebrow--green">Booking Confirmed</span>
+            <h1 class="bk-title">Your Ticket is Ready!</h1>
+            <p class="bk-subtitle">Booking #{{ booking.bookingId }} · {{ booking.routeName }}</p>
+          </div>
+          <div class="bk-header__right">
+            <button type="button" class="bk-btn bk-btn--outline" (click)="printTicket()">
+              <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15"><path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a1 1 0 001 1h8a1 1 0 001-1v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a1 1 0 00-1-1H6a1 1 0 00-1 1zm2 0h6v3H7V4zm-1 9v-1h8v1a1 1 0 01-1 1H7a1 1 0 01-1-1zm8-4a1 1 0 110 2 1 1 0 010-2z" clip-rule="evenodd"/></svg>
+              Print
+            </button>
+            <button type="button" class="bk-btn bk-btn--primary" (click)="goToBookings()">My Bookings</button>
+          </div>
+        </div>
+
+        <!-- Success banner -->
+        <div class="conf-banner">
+          <div class="conf-banner__icon">✓</div>
+          <div>
+            <div class="conf-banner__title">Payment Successful</div>
+            <div class="conf-banner__sub">Your seats are confirmed. Have a safe journey!</div>
+          </div>
+        </div>
+
+        <!-- Ticket -->
+        <div class="bk-ticket">
+          <div class="bk-ticket__header">
+            <div class="bk-ticket__number">Booking #{{ booking.bookingId }}</div>
+            <div class="bk-ticket__route">{{ booking.routeName }}</div>
+          </div>
+
+          <div class="bk-ticket__body">
+            <div class="bk-ticket__grid">
+              <div class="bk-ticket__cell">
+                <span class="bk-ticket__cell-label">Departure</span>
+                <span class="bk-ticket__cell-value">{{ booking.departureTime | date:'EEE, d MMM' }}</span>
+                <span class="bk-ticket__cell-value">{{ booking.departureTime | date:'h:mm a' }}</span>
+              </div>
+              <div class="bk-ticket__cell">
+                <span class="bk-ticket__cell-label">Arrival</span>
+                <span class="bk-ticket__cell-value">{{ booking.arrivalTime | date:'EEE, d MMM' }}</span>
+                <span class="bk-ticket__cell-value">{{ booking.arrivalTime | date:'h:mm a' }}</span>
+              </div>
+              <div class="bk-ticket__cell">
+                <span class="bk-ticket__cell-label">Seats</span>
+                <span class="bk-ticket__cell-value">{{ seatNumbersLabel }}</span>
+              </div>
+              <div class="bk-ticket__cell">
+                <span class="bk-ticket__cell-label">Passengers</span>
+                <span class="bk-ticket__cell-value">{{ booking.seats.length }}</span>
+              </div>
+              <div class="bk-ticket__cell">
+                <span class="bk-ticket__cell-label">Seat Fare</span>
+                <span class="bk-ticket__cell-value">₹{{ seatSubtotal | number:'1.0-0' }}</span>
+              </div>
+              <div class="bk-ticket__cell">
+                <span class="bk-ticket__cell-label">Platform Fee</span>
+                <span class="bk-ticket__cell-value">₹{{ booking.platformFee | number:'1.2-2' }}</span>
+              </div>
+              <div class="bk-ticket__cell">
+                <span class="bk-ticket__cell-label">Total Paid</span>
+                <span class="bk-ticket__cell-value conf-total">₹{{ booking.totalAmount | number:'1.0-0' }}</span>
+              </div>
+            </div>
+
+            <div class="bk-ticket__divider"></div>
+
+            <!-- Passenger rows -->
+            <div class="bk-passengers">
+              <div class="bk-passenger" *ngFor="let seat of booking.seats">
+                <div class="bk-passenger__avatar">{{ seat.passengerName?.charAt(0) || 'P' }}</div>
+                <div class="bk-passenger__info">
+                  <div class="bk-passenger__name">{{ seat.passengerName }}</div>
+                  <div class="bk-passenger__meta">Seat {{ seat.seatNumber }} · Age {{ seat.passengerAge }} · {{ formatGender(seat.passengerGender) }}</div>
+                </div>
+                <div class="bk-passenger__fare">₹{{ seat.amountPaid | number:'1.0-0' }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </ng-container>
+    </ng-container>
+
+  </div>
+</main>

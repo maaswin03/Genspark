@@ -1,0 +1,40 @@
+.operators-page {
+  display: block;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.status-tabs .nav-link {
+  border-radius: 4px;
+  color: #334155;
+  background: #f8fafc;
+}
+
+.status-tabs .nav-link.active {
+  background: #dc2626;
+  color: #fff;
+}
+
+.search-box {
+  width: min(320px, 100%);
+}
+
+.table-wrap {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+}
+
+.click-row {
+  cursor: pointer;
+}
+
+.click-row:hover {
+  background: #fff8f8;
+}

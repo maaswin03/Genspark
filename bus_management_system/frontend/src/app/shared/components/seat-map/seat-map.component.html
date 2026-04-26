@@ -1,0 +1,54 @@
+<!-- Deck tabs — only show when bus has upper deck (sleeper) -->
+<div class="deck-tabs" role="tablist" aria-label="Select bus deck" *ngIf="hasBothDecks">
+  <button
+    *ngFor="let deck of deckOptions"
+    type="button"
+    class="deck-btn"
+    [class.deck-btn-active]="activeDeck === deck.value"
+    (click)="changeDeck(deck.value)"
+    [attr.aria-selected]="activeDeck === deck.value"
+  >
+    {{ deck.label }}
+  </button>
+</div>
+
+<!-- Seat grid -->
+<div class="seat-map-wrap">
+  <div class="seat-map-bus">
+
+    <!-- Driver indicator at front -->
+    <div class="seat-map-driver">
+      <span>🚌 Driver</span>
+    </div>
+
+    <div
+      class="seat-map-grid"
+      [class.seat-map-grid--sleeper]="isSleeper"
+      [style.--columns]="maxColumns"
+    >
+      <ng-container *ngFor="let row of rows">
+        <ng-container *ngFor="let column of columnIndexes">
+          <ng-container *ngIf="seatAt(row, column) as seat; else emptyCell">
+            <button
+              type="button"
+              class="seat-button"
+              [ngClass]="seatClass(seat)"
+              [disabled]="disabled || !canSelect(seat)"
+              (click)="toggleSeat(seat)"
+              [title]="seat.seatNumber + ' — ' + seat.status + ' — ' + formatPrice(seat)"
+              [attr.aria-label]="'Seat ' + seat.seatNumber"
+            >
+              <span class="seat-number">{{ seat.seatNumber }}</span>
+              <span class="seat-price">{{ formatPrice(seat) }}</span>
+            </button>
+          </ng-container>
+          <ng-template #emptyCell>
+            <!-- Column gap acts as the bus aisle -->
+            <div class="seat-empty seat-aisle" aria-hidden="true"></div>
+          </ng-template>
+        </ng-container>
+      </ng-container>
+    </div>
+
+  </div>
+</div>

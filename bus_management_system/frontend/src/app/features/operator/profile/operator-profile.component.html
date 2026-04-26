@@ -1,0 +1,145 @@
+<section class="profile-page">
+  <header class="page-head">
+    <div>
+      <h2 class="h4 fw-bold mb-1">Profile & Documents</h2>
+      <p class="text-secondary mb-0">Maintain company details, security settings, and compliance documents.</p>
+    </div>
+  </header>
+
+  <div *ngIf="message" class="alert" [ngClass]="messageTone === 'success' ? 'alert-success' : 'alert-danger'">{{ message }}</div>
+
+  <div *ngIf="isLoading" class="loading-box">
+    <span class="spinner-border spinner-border-sm text-danger" aria-hidden="true"></span>
+    <span>Loading profile...</span>
+  </div>
+
+  <ng-container *ngIf="!isLoading && profile as profileData">
+    <section class="status-card">
+      <div>
+        <p class="label mb-1">Approval Status</p>
+        <app-admin-badge [text]="approvalStatusLabel" [tone]="approvalBadgeTone"></app-admin-badge>
+      </div>
+      <div>
+        <p class="label mb-1">Onboarded On</p>
+        <p class="mb-0 fw-semibold">{{ profileData.createdAt | date: 'mediumDate' }}</p>
+      </div>
+      <div>
+        <p class="label mb-1">Company</p>
+        <p class="mb-0 fw-semibold">{{ profileData.companyName }}</p>
+      </div>
+    </section>
+
+    <section class="grid-2">
+      <article class="card-block">
+        <h3 class="h6 fw-bold mb-3">Operator Details</h3>
+        <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+          <label class="form-label fw-semibold" for="operatorName">Name</label>
+          <input id="operatorName" type="text" class="form-control mb-2" formControlName="name" maxlength="100" />
+
+          <label class="form-label fw-semibold" for="operatorPhone">Phone</label>
+          <input id="operatorPhone" type="text" class="form-control mb-2" formControlName="phone" maxlength="20" />
+
+          <label class="form-label fw-semibold" for="operatorCompany">Company Name</label>
+          <input id="operatorCompany" type="text" class="form-control mb-2" formControlName="companyName" maxlength="200" />
+
+          <label class="form-label fw-semibold" for="operatorEmail">Email</label>
+          <input id="operatorEmail" type="email" class="form-control mb-2" [value]="profileData.email" readonly />
+
+          <label class="form-label fw-semibold" for="operatorLicense">License Number</label>
+          <input id="operatorLicense" type="text" class="form-control mb-3" [value]="profileData.licenseNumber" readonly />
+
+          <button type="submit" class="btn btn-danger" [disabled]="isSavingProfile">
+            <span *ngIf="isSavingProfile" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+            Save Profile
+          </button>
+        </form>
+      </article>
+
+      <article class="card-block">
+        <h3 class="h6 fw-bold mb-3">Change Password</h3>
+        <form [formGroup]="passwordForm" (ngSubmit)="savePassword()">
+          <label class="form-label fw-semibold" for="currentPassword">Current Password</label>
+          <input id="currentPassword" type="password" class="form-control mb-2" formControlName="currentPassword" />
+
+          <label class="form-label fw-semibold" for="newPassword">New Password</label>
+          <input id="newPassword" type="password" class="form-control mb-2" formControlName="newPassword" />
+
+          <label class="form-label fw-semibold" for="confirmPassword">Confirm New Password</label>
+          <input id="confirmPassword" type="password" class="form-control mb-3" formControlName="confirmPassword" />
+
+          <button type="submit" class="btn btn-outline-dark" [disabled]="isSavingPassword">
+            <span *ngIf="isSavingPassword" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+            Update Password
+          </button>
+        </form>
+      </article>
+    </section>
+
+    <section class="grid-2 align-start">
+      <article class="card-block">
+        <h3 class="h6 fw-bold mb-3">Upload Document</h3>
+        <form [formGroup]="documentForm" (ngSubmit)="uploadDocument()">
+          <label class="form-label fw-semibold" for="docType">Document Type</label>
+          <select id="docType" class="form-select mb-2" formControlName="documentType">
+            <option *ngFor="let option of documentTypeOptions" [ngValue]="option.value">{{ option.label }}</option>
+          </select>
+
+          <label class="form-label fw-semibold" for="docUrl">File URL</label>
+          <input
+            id="docUrl"
+            type="url"
+            class="form-control mb-3"
+            formControlName="fileUrl"
+            placeholder="https://example.com/document.pdf"
+          />
+
+          <button type="submit" class="btn btn-danger" [disabled]="isUploadingDoc">
+            <span *ngIf="isUploadingDoc" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+            Upload
+          </button>
+        </form>
+      </article>
+
+      <article class="card-block">
+        <h3 class="h6 fw-bold mb-3">Approval Timeline</h3>
+        <ol class="timeline">
+          <li>
+            <p class="step-title">Registration Submitted</p>
+            <p class="step-meta">{{ profileData.createdAt | date: 'medium' }}</p>
+          </li>
+          <li>
+            <p class="step-title">Current Status: {{ approvalStatusLabel }}</p>
+            <p class="step-meta">Latest state visible on this profile card</p>
+          </li>
+        </ol>
+      </article>
+    </section>
+
+    <section class="card-block">
+      <h3 class="h6 fw-bold mb-3">Documents</h3>
+      <app-admin-table-shell>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>File</th>
+            <th>Uploaded</th>
+            <th>Verification</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let doc of documents">
+            <td>{{ documentTypeLabel(doc.documentType) }}</td>
+            <td><a [href]="doc.fileUrl" target="_blank" rel="noopener">View File</a></td>
+            <td>{{ doc.uploadedAt | date: 'medium' }}</td>
+            <td>
+              <app-admin-badge [text]="verificationLabel(doc)" [tone]="verificationTone(doc)"></app-admin-badge>
+            </td>
+          </tr>
+          <tr *ngIf="documents.length === 0">
+            <td colspan="4" class="text-center text-secondary py-4">No documents uploaded yet.</td>
+          </tr>
+        </tbody>
+      </app-admin-table-shell>
+    </section>
+  </ng-container>
+</section>

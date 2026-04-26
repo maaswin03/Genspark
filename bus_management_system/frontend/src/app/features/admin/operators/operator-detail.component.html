@@ -1,0 +1,161 @@
+<section class="operator-detail-page">
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <div>
+      <h2 class="h4 fw-bold mb-1">Operator Detail</h2>
+      <p class="text-secondary mb-0">Review documents and approval status.</p>
+    </div>
+    <button type="button" class="btn btn-outline-secondary" (click)="goBack()">Back to operators</button>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+  <div *ngIf="isLoading" class="d-flex justify-content-center py-5">
+    <div class="spinner-border text-danger" role="status" aria-label="Loading operator details"></div>
+  </div>
+
+  <ng-container *ngIf="!isLoading && operator">
+    <div class="row g-3">
+      <div class="col-12 col-xl-7">
+        <section class="panel-card mb-3">
+          <h3 class="h6 fw-bold mb-3">Company & Personal Info</h3>
+          <div class="detail-grid">
+            <div>
+              <small>Company Name</small>
+              <p>{{ operator.companyName }}</p>
+            </div>
+            <div>
+              <small>License Number</small>
+              <p>{{ operator.licenseNumber }}</p>
+            </div>
+            <div>
+              <small>Operator Name</small>
+              <p>{{ operator.name }}</p>
+            </div>
+            <div>
+              <small>Email</small>
+              <p>{{ operator.email }}</p>
+            </div>
+            <div>
+              <small>Phone</small>
+              <p>{{ operator.phone }}</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel-card mb-3">
+          <h3 class="h6 fw-bold mb-3">Approval Status</h3>
+          <p><span [class]="statusClass">{{ statusLabel }}</span></p>
+
+          <div class="timeline">
+            <div *ngFor="let step of timelineSteps" class="timeline-item" [class.complete]="step.complete" [class.active]="step.active">
+              <span class="dot"></span>
+              <span>{{ step.label }}</span>
+            </div>
+          </div>
+
+          <div *ngIf="operator.rejectionReason" class="note-box mt-2 text-danger">
+            Rejection reason: {{ operator.rejectionReason }}
+          </div>
+
+          <div *ngIf="operator.blockedReason" class="note-box mt-2 text-dark">
+            Blocked reason: {{ operator.blockedReason }}
+          </div>
+        </section>
+
+        <section class="panel-card mb-3">
+          <h3 class="h6 fw-bold mb-3">Documents</h3>
+          <div class="table-responsive">
+            <table class="table align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Uploaded</th>
+                  <th>Verified</th>
+                  <th class="text-end">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let doc of operator.documents">
+                  <td>{{ doc.documentType }}</td>
+                  <td>{{ doc.uploadedAt | date:'dd MMM, y' }}</td>
+                  <td>
+                    <span class="badge text-bg-success" *ngIf="doc.verifiedAt; else pendingBadge">Verified</span>
+                    <ng-template #pendingBadge>
+                      <span class="badge text-bg-warning">Pending</span>
+                    </ng-template>
+                  </td>
+                  <td class="text-end">
+                    <div class="d-inline-flex gap-1">
+                      <button class="btn btn-sm btn-outline-secondary" type="button" (click)="openDocument(doc.fileUrl)">Open</button>
+                      <button class="btn btn-sm btn-outline-success" type="button" [disabled]="isSubmitting || !!doc.verifiedAt" (click)="verifyDocument(doc.id)">
+                        Verify
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr *ngIf="operator.documents.length === 0">
+                  <td colspan="4" class="text-center text-secondary py-4">No uploaded documents.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <div class="col-12 col-xl-5">
+        <section class="panel-card mb-3">
+          <h3 class="h6 fw-bold mb-3">Actions</h3>
+          <div class="d-grid gap-2">
+            <button class="btn btn-success" type="button" [disabled]="isSubmitting" (click)="approve()">Approve</button>
+            <button class="btn btn-warning" type="button" [disabled]="isSubmitting" (click)="showRejectModal()">Reject</button>
+            <button class="btn btn-dark" type="button" [disabled]="isSubmitting" (click)="showBlockModal()">Block</button>
+            <button class="btn btn-outline-secondary" type="button" [disabled]="isSubmitting" (click)="unblock()">Unblock</button>
+          </div>
+        </section>
+
+        <section class="panel-card mb-3">
+          <h3 class="h6 fw-bold mb-3">Additional Info</h3>
+          <div class="mb-3">
+            <p class="mb-1 fw-semibold">Buses registered</p>
+            <p class="text-secondary mb-2" *ngIf="buses.length === 0">No buses registered.</p>
+            <ul class="list-group" *ngIf="buses.length > 0">
+              <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let bus of buses">
+                <span>{{ bus.busNumber }}</span>
+                <span class="badge text-bg-light">Seats: {{ bus.totalSeats }}</span>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="mb-1 fw-semibold">Revenue summary</p>
+            <ng-container *ngIf="revenueSummary; else noRevenue">
+              <p class="mb-1">Total revenue: {{ revenueSummary.totalRevenue | currency:'INR':'symbol':'1.0-0' }}</p>
+              <p class="mb-1">Platform fee: {{ revenueSummary.totalPlatformFee | currency:'INR':'symbol':'1.0-0' }}</p>
+              <p class="mb-0">Operator earning: {{ revenueSummary.totalOperatorEarning | currency:'INR':'symbol':'1.0-0' }}</p>
+            </ng-container>
+            <ng-template #noRevenue>
+              <p class="text-secondary mb-0">Revenue data is not available for this operator yet.</p>
+            </ng-template>
+          </div>
+        </section>
+      </div>
+    </div>
+  </ng-container>
+</section>
+
+<div class="modal-backdrop" *ngIf="activeModal">
+  <div class="modal-card">
+    <h4 class="h6 fw-bold mb-2">{{ activeModal === 'reject' ? 'Reject operator' : 'Block operator' }}</h4>
+    <p class="text-secondary mb-3">Please provide a reason to continue.</p>
+
+    <form [formGroup]="actionForm" (ngSubmit)="submitModalAction()" novalidate>
+      <textarea rows="4" class="form-control" formControlName="reason" placeholder="Enter reason"></textarea>
+      <div *ngIf="reasonInvalid" class="text-danger small mt-1">Reason is required (min 3 characters).</div>
+
+      <div class="d-flex justify-content-end gap-2 mt-3">
+        <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">Cancel</button>
+        <button type="submit" class="btn btn-danger" [disabled]="isSubmitting">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,112 @@
+<main class="bk-page">
+  <div class="container-xl bk-layout">
+
+    <!-- Header -->
+    <div class="bk-header">
+      <div>
+        <span class="bk-eyebrow">My Account</span>
+        <h1 class="bk-title">My Bookings</h1>
+        <p class="bk-subtitle">View and manage all your bus bookings.</p>
+      </div>
+    </div>
+
+    <!-- Alerts -->
+    <div *ngIf="errorMessage" class="bk-alert bk-alert--error">
+      <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" style="flex-shrink:0"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+      {{ errorMessage }}
+    </div>
+    <div *ngIf="successMessage" class="bk-alert bk-alert--success">
+      <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" style="flex-shrink:0"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+      {{ successMessage }}
+    </div>
+
+    <!-- Tabs -->
+    <div class="bk-tabs">
+      <button
+        type="button"
+        class="bk-tab"
+        *ngFor="let tab of tabs"
+        [class.bk-tab--active]="activeTab === tab.key"
+        (click)="setTab(tab.key)"
+      >{{ tab.label }}</button>
+    </div>
+
+    <!-- Loading skeleton -->
+    <div class="bk-skeleton" *ngIf="isLoading">
+      <div class="bk-skeleton__row" *ngFor="let i of [1,2,3,4]">
+        <div class="bk-skeleton__left">
+          <div class="bk-skeleton__line bk-skeleton__line--title"></div>
+          <div class="bk-skeleton__line bk-skeleton__line--sub"></div>
+        </div>
+        <div class="bk-skeleton__right">
+          <div class="bk-skeleton__pill"></div>
+          <div class="bk-skeleton__line bk-skeleton__line--amount"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty -->
+    <div class="bk-empty" *ngIf="!isLoading && bookings.length === 0 && !errorMessage">
+      <div class="bk-empty__icon">🎫</div>
+      <div class="bk-empty__title">No bookings found</div>
+      <div class="bk-empty__sub">
+        {{ activeTab === 'all' ? "You haven't made any bookings yet."
+           : activeTab === 'upcoming' ? 'No upcoming trips.'
+           : activeTab === 'completed' ? 'No completed trips yet.'
+           : 'No cancelled bookings.' }}
+      </div>
+      <a routerLink="/home" class="bk-btn bk-btn--primary" style="margin-top:0.5rem;text-decoration:none;">Search Buses</a>
+    </div>
+
+    <!-- Booking list -->
+    <div class="bk-list" *ngIf="!isLoading && bookings.length > 0">
+      <div
+        class="bk-booking-card"
+        *ngFor="let booking of bookings"
+        (click)="openBooking(booking.bookingId)"
+      >
+        <!-- Left: route + meta -->
+        <div class="bk-booking-card__left">
+          <div class="bk-booking-card__route">{{ booking.routeName }}</div>
+          <div class="bk-booking-card__meta">
+            {{ booking.departureTime | date:'EEE, d MMM yyyy · h:mm a' }}
+            &nbsp;·&nbsp; {{ booking.seatCount }} seat{{ booking.seatCount !== 1 ? 's' : '' }}
+          </div>
+        </div>
+
+        <!-- Right: status + amount + cancel -->
+        <div class="bk-booking-card__right" (click)="$event.stopPropagation()">
+          <span class="bk-status-badge"
+            [class.bk-status-badge--upcoming]="isUpcoming(booking)"
+            [class.bk-status-badge--completed]="isCompleted(booking)"
+            [class.bk-status-badge--cancelled]="isCancelledStatus(booking)"
+            [class.bk-status-badge--pending]="normalize(booking.status) === '0' || normalize(booking.status) === 'pending'"
+          >
+            {{ displayStatus(booking) }}
+          </span>
+          <div class="bk-booking-card__amount">₹{{ booking.totalAmount | number:'1.0-0' }}</div>
+          <div class="bk-booking-card__id">#{{ booking.bookingId }}</div>
+          <button
+            type="button"
+            class="bk-btn bk-btn--danger-sm"
+            *ngIf="canCancel(booking)"
+            (click)="openCancelModal(booking)"
+          >Cancel</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Cancel Modal -->
+  <app-confirm-modal
+    *ngIf="showCancelModal"
+    [open]="showCancelModal"
+    title="Cancel Booking"
+    [message]="cancelModalMessage()"
+    confirmLabel="Yes, Cancel"
+    [processing]="isCancelling"
+    (confirm)="confirmCancel()"
+    (cancel)="closeCancelModal()"
+  ></app-confirm-modal>
+</main>

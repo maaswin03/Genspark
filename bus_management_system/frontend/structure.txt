@@ -1,0 +1,73 @@
+src/app/
+├── core/
+│   ├── guards/
+│   │   ├── auth.guard.ts
+│   │   ├── admin.guard.ts
+│   │   ├── operator.guard.ts
+│   │   └── user.guard.ts
+│   ├── interceptors/
+│   │   ├── auth.interceptor.ts      ← attaches JWT to every request
+│   │   └── error.interceptor.ts     ← handles 401/403/500 globally
+│   ├── services/
+│   │   ├── auth.service.ts
+│   │   ├── token.service.ts         ← store/read JWT from localStorage
+│   │   └── notification.service.ts
+│   └── models/                      ← TypeScript interfaces (mirror DTOs)
+│
+├── shared/
+│   ├── components/
+│   │   ├── navbar/
+│   │   ├── sidebar/
+│   │   ├── seat-map/                ← reused in operator + user
+│   │   ├── status-badge/
+│   │   ├── confirmation-modal/
+│   │   └── countdown-timer/         ← 5-min seat lock timer
+│   └── pipes/
+│       └── time-ago.pipe.ts
+│
+├── features/
+│   ├── auth/
+│   │   ├── login/
+│   │   ├── register/
+│   │   └── operator-register/
+│   │
+│   ├── admin/
+│   │   ├── admin-layout/            ← sidebar + shell
+│   │   ├── dashboard/
+│   │   ├── operators/
+│   │   │   ├── operator-list/
+│   │   │   └── operator-detail/
+│   │   ├── locations/
+│   │   ├── routes/
+│   │   ├── users/
+│   │   ├── revenue/
+│   │   └── platform-fee/
+│   │
+│   ├── operator/
+│   │   ├── operator-layout/
+│   │   ├── dashboard/
+│   │   ├── buses/
+│   │   │   ├── bus-list/
+│   │   │   └── bus-form/            ← multi-step (details + seat builder)
+│   │   ├── trips/
+│   │   │   ├── trip-list/
+│   │   │   ├── trip-detail/
+│   │   │   └── schedule-form/
+│   │   ├── bookings/
+│   │   ├── revenue/
+│   │   ├── offices/
+│   │   └── profile/
+│   │
+│   └── user/
+│       ├── home/
+│       ├── search/
+│       ├── seat-selection/
+│       ├── passenger-details/
+│       ├── payment/
+│       ├── bookings/
+│       │   ├── booking-list/
+│       │   └── booking-detail/
+│       ├── notifications/
+│       └── profile/
+│
+└── app-routing.module.ts

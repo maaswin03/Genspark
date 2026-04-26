@@ -1,0 +1,304 @@
+<main class="bm-home">
+
+  <!-- ═══ HERO — unchanged ═══════════════════════════════════════════════ -->
+  <section class="bm-hero">
+    <div class="bm-hero__bg-shapes">
+      <div class="bm-hero__shape bm-hero__shape--1"></div>
+      <div class="bm-hero__shape bm-hero__shape--2"></div>
+      <div class="bm-hero__shape bm-hero__shape--3"></div>
+    </div>
+
+    <div class="container-xl bm-hero__inner">
+      <!-- Copy -->
+      <div class="bm-hero__copy">
+        <div class="bm-hero__badge">India's #1 Bus Booking Platform</div>
+        <h1 class="bm-hero__title">
+          Travel Smarter.<br>
+          <span class="bm-hero__title--accent">Book Instantly.</span>
+        </h1>
+        <p class="bm-hero__subtitle">
+          Search from thousands of buses across India. Confirmed seats, live tracking, and hassle-free refunds — all in one place.
+        </p>
+        <div class="bm-hero__stats">
+          <div class="bm-stat">
+            <span class="bm-stat__num">10K+</span>
+            <span class="bm-stat__label">Routes</span>
+          </div>
+          <div class="bm-stat__sep"></div>
+          <div class="bm-stat">
+            <span class="bm-stat__num">500+</span>
+            <span class="bm-stat__label">Operators</span>
+          </div>
+          <div class="bm-stat__sep"></div>
+          <div class="bm-stat">
+            <span class="bm-stat__num">2M+</span>
+            <span class="bm-stat__label">Happy Travellers</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search Card -->
+      <div class="bm-search-card">
+        <div class="bm-search-card__header">
+          <span class="bm-search-card__title">Find Your Bus</span>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="searchTrips()" autocomplete="off" novalidate>
+
+          <!-- From / Swap / To row -->
+          <div class="bm-search-row">
+
+            <!-- FROM -->
+            <div class="bm-field" [class.bm-field--error]="fromRequiredError">
+              <label class="bm-field__label">
+                <span class="bm-field__label-dot bm-field__label-dot--from"></span>
+                FROM
+              </label>
+              <div class="bm-field__input-wrap">
+                <input
+                  type="text"
+                  class="bm-field__input"
+                  placeholder="Departure city"
+                  formControlName="fromQuery"
+                  (focus)="onFromFocus()"
+                  (blur)="onFromBlur()"
+                  autocomplete="off"
+                  id="from-input"
+                />
+                <button
+                  *ngIf="form.controls.fromQuery.value"
+                  type="button"
+                  class="bm-field__clear"
+                  (click)="clearFrom()"
+                  aria-label="Clear from"
+                >&times;</button>
+              </div>
+              <div *ngIf="fromRequiredError" class="bm-field__error">Please select a departure city</div>
+
+              <div *ngIf="showFromDropdown" class="bm-suggestions">
+                <div *ngIf="loadingLocations" class="bm-suggestions__state">
+                  <span class="bm-spinner"></span> Loading locations…
+                </div>
+                <button
+                  *ngFor="let loc of fromSuggestions; trackBy: trackByLocationId"
+                  type="button"
+                  class="bm-suggestions__item"
+                  (mousedown)="selectFrom(loc)"
+                >
+                  <span class="bm-suggestions__city">{{ loc.name }}</span>
+                  <span class="bm-suggestions__region">{{ loc.city }}, {{ loc.state }}</span>
+                </button>
+                <div *ngIf="!loadingLocations && fromSuggestions.length === 0" class="bm-suggestions__state bm-suggestions__state--empty">
+                  No city found
+                </div>
+              </div>
+            </div>
+
+            <!-- SWAP -->
+            <button type="button" class="bm-swap" (click)="swapLocations()" aria-label="Swap cities" title="Swap cities">
+              &#8644;
+            </button>
+
+            <!-- TO -->
+            <div class="bm-field" [class.bm-field--error]="toRequiredError">
+              <label class="bm-field__label">
+                <span class="bm-field__label-dot bm-field__label-dot--to"></span>
+                TO
+              </label>
+              <div class="bm-field__input-wrap">
+                <input
+                  type="text"
+                  class="bm-field__input"
+                  placeholder="Destination city"
+                  formControlName="toQuery"
+                  (focus)="onToFocus()"
+                  (blur)="onToBlur()"
+                  autocomplete="off"
+                  id="to-input"
+                />
+                <button
+                  *ngIf="form.controls.toQuery.value"
+                  type="button"
+                  class="bm-field__clear"
+                  (click)="clearTo()"
+                  aria-label="Clear to"
+                >&times;</button>
+              </div>
+              <div *ngIf="toRequiredError" class="bm-field__error">Please select a destination city</div>
+
+              <div *ngIf="showToDropdown" class="bm-suggestions">
+                <div *ngIf="loadingLocations" class="bm-suggestions__state">
+                  <span class="bm-spinner"></span> Loading locations…
+                </div>
+                <button
+                  *ngFor="let loc of toSuggestions; trackBy: trackByLocationId"
+                  type="button"
+                  class="bm-suggestions__item"
+                  (mousedown)="selectTo(loc)"
+                >
+                  <span class="bm-suggestions__city">{{ loc.name }}</span>
+                  <span class="bm-suggestions__region">{{ loc.city }}, {{ loc.state }}</span>
+                </button>
+                <div *ngIf="!loadingLocations && toSuggestions.length === 0" class="bm-suggestions__state bm-suggestions__state--empty">
+                  No city found
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Date row -->
+          <div class="bm-date-row">
+            <div class="bm-field bm-field--date" [class.bm-field--error]="dateRequiredError">
+              <label class="bm-field__label">
+                <span class="bm-field__label-dot bm-field__label-dot--date"></span>
+                JOURNEY DATE
+              </label>
+              <div class="bm-field__input-wrap">
+                <input
+                  type="date"
+                  class="bm-field__input"
+                  formControlName="journeyDate"
+                  [min]="todayIso"
+                  id="journey-date"
+                />
+              </div>
+              <div *ngIf="dateRequiredError" class="bm-field__error">Please choose a journey date</div>
+            </div>
+
+          </div>
+
+          <!-- Error banner -->
+          <div *ngIf="errorMessage" class="bm-error-banner" role="alert">
+            {{ errorMessage }}
+          </div>
+
+          <!-- Search button -->
+          <button type="submit" class="bm-search-btn" id="search-buses-btn">
+            <span *ngIf="!isSearching">Search Buses</span>
+            <span *ngIf="isSearching" class="bm-search-btn__loading">
+              <span class="bm-spinner bm-spinner--white"></span>
+              Searching…
+            </span>
+          </button>
+
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══ TRUST BAR ══════════════════════════════════════════════════════ -->
+  <section class="bm-trust">
+    <div class="container-xl">
+      <div class="bm-trust__inner">
+
+        <div class="bm-trust-item">
+          <div class="bm-trust-item__icon-box bm-trust-item__icon-box--green">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+          <div>
+            <div class="bm-trust-item__title">Confirmed Tickets</div>
+            <div class="bm-trust-item__sub">Instant booking confirmation</div>
+          </div>
+        </div>
+
+        <div class="bm-trust-item">
+          <div class="bm-trust-item__icon-box bm-trust-item__icon-box--blue">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
+              <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/>
+              <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+          <div>
+            <div class="bm-trust-item__title">Secure Payments</div>
+            <div class="bm-trust-item__sub">100% safe &amp; encrypted</div>
+          </div>
+        </div>
+
+        <div class="bm-trust-item">
+          <div class="bm-trust-item__icon-box bm-trust-item__icon-box--amber">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
+              <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+          <div>
+            <div class="bm-trust-item__title">Easy Cancellation</div>
+            <div class="bm-trust-item__sub">Hassle-free refunds</div>
+          </div>
+        </div>
+
+        <div class="bm-trust-item">
+          <div class="bm-trust-item__icon-box bm-trust-item__icon-box--purple">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20">
+              <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="bm-trust-item__title">24/7 Support</div>
+            <div class="bm-trust-item__sub">Always here to help you</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ WHY BUSMATE ════════════════════════════════════════════════════ -->
+  <section class="bm-features">
+    <div class="container-xl">
+      <div class="bm-section-header">
+        <div class="bm-section-eyebrow">Why BusMate</div>
+        <h2 class="bm-section-title">The smartest way to book your bus</h2>
+        <p class="bm-section-sub">Everything you need for a smooth journey — from search to seat selection to boarding.</p>
+      </div>
+
+      <div class="bm-features__grid">
+
+        <div class="bm-feature-card">
+          <div class="bm-feature-card__icon bm-feature-card__icon--blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+          </div>
+          <h3 class="bm-feature-card__title">Live Route Search</h3>
+          <p class="bm-feature-card__body">Search buses across hundreds of routes with real-time availability and seat counts.</p>
+        </div>
+
+        <div class="bm-feature-card">
+          <div class="bm-feature-card__icon bm-feature-card__icon--green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+              <rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/>
+            </svg>
+          </div>
+          <h3 class="bm-feature-card__title">Seat Selection</h3>
+          <p class="bm-feature-card__body">Pick your preferred seat — window, aisle, upper or lower deck — before you pay.</p>
+        </div>
+
+        <div class="bm-feature-card">
+          <div class="bm-feature-card__icon bm-feature-card__icon--amber">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
+          </div>
+          <h3 class="bm-feature-card__title">Instant Confirmation</h3>
+          <p class="bm-feature-card__body">Get your e-ticket in seconds. No waiting, no queues, no stress.</p>
+        </div>
+
+        <div class="bm-feature-card">
+          <div class="bm-feature-card__icon bm-feature-card__icon--red">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+          </div>
+          <h3 class="bm-feature-card__title">Smart Notifications</h3>
+          <p class="bm-feature-card__body">Real-time alerts for bus delays, gate changes, and boarding time reminders.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>

@@ -1,0 +1,210 @@
+.buses-page {
+  display: block;
+}
+
+.bus-card,
+.review-box {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+.bus-meta {
+  display: grid;
+  gap: 0.85rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.empty-state {
+  border: 1px dashed #cbd5e1;
+  border-radius: 4px;
+  padding: 1rem;
+  text-align: center;
+  color: #64748b;
+  background: #f8fafc;
+}
+
+.wizard-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.wizard-step,
+.deck-tab {
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #334155;
+  border-radius: 4px;
+  padding: 0.55rem 0.75rem;
+  font-weight: 600;
+}
+
+.wizard-step.active,
+.deck-tab.active {
+  background: #ffe4e6;
+  border-color: #fecdd3;
+  color: #9f1239;
+}
+
+.wizard-panel {
+  display: grid;
+  gap: 1rem;
+}
+
+.seat-builder-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+}
+
+.deck-block {
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  background: #fff;
+  padding: 0.85rem;
+  margin-bottom: 0.85rem;
+}
+
+.deck-grid,
+.seat-preview-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.deck-layout-grid {
+  align-items: stretch;
+}
+
+.deck-column {
+  display: flex;
+}
+
+.seat-row-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  background: #f8fafc;
+  padding: 0.8rem;
+  width: 100%;
+}
+
+.row-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.seat-row-structure {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 16px minmax(0, 1fr);
+  gap: 0.35rem;
+  align-items: stretch;
+}
+
+.seat-side {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  gap: 0.35rem;
+  align-items: stretch;
+  min-width: 0;
+}
+
+.seat-tile {
+  min-width: 0;
+  padding: 0.45rem 0.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  background: #fff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.seat-tile.seat {
+  width: 68px;
+  min-width: 68px;
+  height: 52px;
+}
+
+.seat-tile.berth {
+  width: 68px;
+  min-width: 68px;
+  height: 172px;
+  padding: 0.55rem 0.6rem;
+}
+
+.seat-aisle {
+  min-width: 5px;
+}
+
+.seat-builder-card,
+.seat-layout-card,
+.seat-preview {
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  background: #f8fafc;
+  padding: 0.8rem;
+}
+
+.seat-preview-grid,
+.seat-layout-grid {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.seat-preview-grid.compact-grid,
+.seat-layout-grid.compact-grid {
+  gap: 0.5rem;
+}
+
+.layout-view {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.deck-tabs {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .bus-meta {
+    grid-template-columns: 1fr;
+  }
+
+  .wizard-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .seat-row-structure {
+    grid-template-columns: 1fr;
+  }
+
+  .seat-aisle {
+    width: fit-content;
+  }
+
+  .seat-side {
+    flex-wrap: wrap;
+  }
+
+  .seat-tile.berth,
+  .seat-tile.seat {
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    min-height: 52px;
+  }
+
+  .review-box,
+  .deck-block,
+  .seat-row-card {
+    padding: 0.75rem;
+  }
+}

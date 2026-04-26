@@ -1,0 +1,120 @@
+<section class="dashboard-page">
+  <div class="d-flex justify-content-between align-items-start mb-3 flex-wrap gap-2">
+    <div>
+      <h2 class="h4 fw-bold mb-1">Dashboard</h2>
+      <p class="text-secondary mb-0">Live overview of revenue, trips, bookings, and fleet activity.</p>
+    </div>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+  <div *ngIf="isLoading" class="alert alert-light border d-flex align-items-center gap-2 mb-4">
+    <div class="spinner-border spinner-border-sm text-danger" role="status" aria-label="Loading dashboard"></div>
+    <span>Loading dashboard data...</span>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-12 col-md-6 col-xl-4">
+      <article class="metric-card">
+        <p>Net earnings (current month)</p>
+        <h3>{{ revenueSummary.totalOperatorEarning | currency:'INR':'symbol':'1.0-0' }}</h3>
+      </article>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4">
+      <article class="metric-card">
+        <p>Total bookings (current month)</p>
+        <h3>{{ currentMonthBookings }}</h3>
+      </article>
+    </div>
+
+    <div class="col-12 col-md-6 col-xl-4">
+      <article class="metric-card">
+        <p>Active buses count</p>
+        <h3>{{ activeBusesCount }}</h3>
+      </article>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-3">
+    <div class="col-12 col-xl-5">
+      <section class="panel-card h-100">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h3 class="h6 fw-bold mb-0">Upcoming Trips Today</h3>
+          <span class="text-secondary small">{{ upcomingTripsToday.length }} trips</span>
+        </div>
+
+        <div *ngIf="!isLoading && upcomingTripsToday.length === 0" class="empty-state">No upcoming trips scheduled for today.</div>
+
+        <div class="trip-list" *ngIf="upcomingTripsToday.length > 0">
+          <article class="trip-item" *ngFor="let trip of upcomingTripsToday">
+            <div>
+              <p class="trip-title mb-1">{{ trip.routeName }}</p>
+              <p class="text-secondary small mb-0">Bus {{ trip.busNumber }} · {{ formatTripTime(trip.departureTime) }} - {{ formatTripTime(trip.arrivalTime) }}</p>
+            </div>
+            <app-admin-badge [text]="getTripStatusLabel(trip.status)" [tone]="getTripStatusTone(trip.status)"></app-admin-badge>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-12 col-xl-7">
+      <section class="panel-card h-100">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h3 class="h6 fw-bold mb-0">Monthly Earnings</h3>
+          <span class="text-secondary small">Current year trend</span>
+        </div>
+        <div class="chart-wrap">
+          <ng-container *ngIf="chartHasData; else emptyChart">
+            <canvas baseChart [data]="chartData" [options]="chartOptions" [type]="chartType"></canvas>
+          </ng-container>
+          <ng-template #emptyChart>
+            <div class="empty-state">No earning data available yet.</div>
+          </ng-template>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-12 col-xl-12">
+      <section class="panel-card">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h3 class="h6 fw-bold mb-0">Recent Bookings</h3>
+          <span class="text-secondary small">Top 5 latest entries</span>
+        </div>
+
+        <app-admin-table-shell>
+          <thead>
+            <tr>
+              <th>Customer</th>
+              <th>Route</th>
+              <th>Departure</th>
+              <th>Seats</th>
+              <th>Status</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let booking of recentBookings">
+              <td>
+                <div class="fw-semibold">{{ booking.userName }}</div>
+                <div class="text-secondary small">{{ booking.userEmail }}</div>
+              </td>
+              <td>{{ booking.routeName }}</td>
+              <td>{{ booking.departureTime | date:'dd MMM, y hh:mm a' }}</td>
+              <td>{{ booking.seatCount }}</td>
+              <td>
+                <app-admin-badge [text]="getBookingStatusLabel(booking.bookingStatus)" [tone]="getBookingStatusTone(booking.bookingStatus)"></app-admin-badge>
+              </td>
+              <td class="fw-semibold">{{ booking.totalAmount | currency:'INR':'symbol':'1.0-0' }}</td>
+            </tr>
+            <tr *ngIf="recentBookings.length === 0">
+              <td colspan="6" class="text-center text-secondary py-4">No recent bookings found.</td>
+            </tr>
+          </tbody>
+        </app-admin-table-shell>
+      </section>
+    </div>
+  </div>
+</section>

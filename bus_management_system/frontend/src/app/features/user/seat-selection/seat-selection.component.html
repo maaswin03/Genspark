@@ -1,0 +1,211 @@
+<main class="ss-page">
+  <div class="container-xl ss-layout">
+
+    <!-- ══ HEADER ════════════════════════════════════════════════════════ -->
+    <div class="ss-header">
+      <div>
+        <span class="ss-eyebrow">Seat Selection</span>
+        <h1 class="ss-title">Choose Your Seats</h1>
+        <p class="ss-subtitle" *ngIf="trip">
+          {{ trip.routeName }}&nbsp;&nbsp;·&nbsp;&nbsp;Departure {{ formatTime(trip.departureTime)
+          }}&nbsp;&nbsp;·&nbsp;&nbsp;Arrival {{ formatTime(trip.arrivalTime) }}
+        </p>
+      </div>
+
+      <!-- Reservation Timer -->
+      <div *ngIf="reservation" class="ss-timer" [class.ss-timer--danger]="timerIsLow">
+        <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
+          <path fill-rule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+            clip-rule="evenodd" />
+        </svg>
+        Hold expires in <strong>{{ timerLabel }}</strong>
+      </div>
+
+      <a routerLink="/trips/search" class="ss-back-btn">&#8592; Back to trips</a>
+    </div>
+
+    <!-- ══ LOADING ════════════════════════════════════════════════════════ -->
+    <div *ngIf="isLoading" class="ss-state-box">
+      <div class="ss-spinner"></div>
+      <div class="ss-state-box__text">Loading seat layout…</div>
+    </div>
+
+    <!-- ══ ERROR ══════════════════════════════════════════════════════════ -->
+    <div *ngIf="errorMessage && !isLoading" class="ss-alert ss-alert--error">
+      <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" style="flex-shrink:0">
+        <path fill-rule="evenodd"
+          d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+          clip-rule="evenodd" />
+      </svg>
+      {{ errorMessage }}
+    </div>
+
+    <!-- ══ SUCCESS ═════════════════════════════════════════════════════════ -->
+    <div *ngIf="infoMessage && !errorMessage" class="ss-alert ss-alert--success">
+      <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" style="flex-shrink:0">
+        <path fill-rule="evenodd"
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+          clip-rule="evenodd" />
+      </svg>
+      {{ infoMessage }}
+    </div>
+
+    <!-- ══ MAIN BODY ═══════════════════════════════════════════════════════ -->
+    <div class="ss-body" *ngIf="!isLoading && trip">
+
+      <!-- Left: Seat Map -->
+      <section class="ss-main">
+
+        <!-- Trip info bar -->
+        <div class="ss-trip-bar">
+          <div class="ss-trip-bar__left">
+            <span class="ss-trip-bar__operator">{{ trip.operatorName }}</span>
+            <span class="ss-trip-bar__bus">{{ trip.busNumber }}</span>
+          </div>
+          <div class="ss-trip-bar__right">
+            <span>{{ availableSeatCount }} seats available</span>
+          </div>
+        </div>
+
+        <!-- Seat map card -->
+        <div class="ss-card">
+          <!-- Legend -->
+          <div class="ss-legend">
+            <span class="ss-legend__item">
+              <span class="ss-legend__dot ss-legend__dot--available"></span>
+              Available
+            </span>
+            <span class="ss-legend__item">
+              <span class="ss-legend__dot ss-legend__dot--selected"></span>
+              Selected
+            </span>
+            <span class="ss-legend__item">
+              <span class="ss-legend__dot ss-legend__dot--booked"></span>
+              Booked
+            </span>
+            <span class="ss-legend__item">
+              <span class="ss-legend__dot ss-legend__dot--reserved"></span>
+              Reserved
+            </span>
+          </div>
+
+          <!-- Seat map component -->
+          <app-seat-map [seats]="trip.seats"
+            [selectedTripSeatIds]="selectedTripSeatIds.length > 0 ? selectedTripSeatIds : trip.seats.filter(s => selectedSeatIds.includes(s.seatId)).map(s => s.tripSeatId)"
+            [activeDeck]="activeDeck" [isSleeper]="isSleeper" (deckChange)="changeDeck($event)"
+            (seatToggle)="selectSeat($event)"></app-seat-map>
+
+        </div>
+      </section>
+
+      <!-- Right: Booking Summary sidebar -->
+      <aside class="ss-sidebar">
+
+        <!-- Reservation Summary -->
+        <div class="ss-card ss-card--summary">
+          <h3 class="ss-card__title">Reservation Summary</h3>
+          <div class="ss-summary">
+            <div class="ss-summary__row">
+              <span class="ss-summary__label">Selected seats</span>
+              <span class="ss-summary__value">{{ selectedSeatNumbers.join(', ') || '—' }}</span>
+            </div>
+            <div class="ss-summary__row">
+              <span class="ss-summary__label">Seats count</span>
+              <span class="ss-summary__value">{{ selectedSeatIds.length }}</span>
+            </div>
+            <div class="ss-summary__row">
+              <span class="ss-summary__label">Price per seat</span>
+              <span class="ss-summary__value">&#8377;{{ trip.baseFare | number:'1.0-0' }}</span>
+            </div>
+            <div class="ss-summary__row ss-summary__row--total">
+              <span class="ss-summary__label">Total</span>
+              <span class="ss-summary__value ss-summary__value--big">&#8377;{{ selectedSeatTotal | number:'1.0-0'
+                }}</span>
+            </div>
+          </div>
+
+          <button type="button" class="ss-btn ss-btn--primary ss-btn--full"
+            [disabled]="isLoading || selectedSeatIds.length === 0" (click)="reserveSeats()">
+            <svg *ngIf="isLoading" class="ss-btn-spinner" viewBox="0 0 24 24" fill="none" width="16" height="16">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" stroke-dasharray="60"
+                stroke-dashoffset="20" />
+            </svg>
+            {{ isLoading ? 'Reserving…' : 'Reserve Seats' }}
+          </button>
+        </div>
+
+        <!-- Boarding Point -->
+        <div class="ss-card">
+          <h3 class="ss-card__title">Boarding Point</h3>
+
+          <div class="ss-point-info" *ngIf="boardingPoint">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+              <path fill-rule="evenodd"
+                d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                clip-rule="evenodd" />
+            </svg>
+            <div>
+              <div class="ss-point-info__name">{{ boardingPoint.name }}</div>
+              <div class="ss-point-info__location">{{ boardingPoint.locationName }}</div>
+            </div>
+          </div>
+
+          <p class="ss-card__help" *ngIf="!boardingPoint">
+            No boarding point set for this route.
+          </p>
+        </div>
+
+        <!-- Dropping Point -->
+        <div class="ss-card">
+          <h3 class="ss-card__title">Dropping Point</h3>
+
+          <div class="ss-point-info" *ngIf="droppingPoint">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+              <path fill-rule="evenodd"
+                d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                clip-rule="evenodd" />
+            </svg>
+            <div>
+              <div class="ss-point-info__name">{{ droppingPoint.name }}</div>
+              <div class="ss-point-info__location">{{ droppingPoint.locationName }}</div>
+            </div>
+          </div>
+
+          <p class="ss-card__help" *ngIf="!droppingPoint">
+            No dropping point set for this route.
+          </p>
+        </div>
+
+        <!-- Proceed -->
+        <button type="button" class="ss-btn ss-btn--primary ss-btn--full" [disabled]="!canProceed"
+          (click)="continueToPassengerDetails()">
+          Proceed to Passenger Details
+          <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+            <path fill-rule="evenodd"
+              d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+              clip-rule="evenodd" />
+          </svg>
+        </button>
+
+        <!-- Validation checklist -->
+        <div class="ss-checklist">
+          <div class="ss-check" [class.ss-check--done]="selectedTripSeatIds.length > 0">
+            <span class="ss-check__dot"></span>
+            Seats reserved
+          </div>
+          <div class="ss-check" [class.ss-check--done]="selectedBoardingPointId > 0">
+            <span class="ss-check__dot"></span>
+            Boarding point confirmed
+          </div>
+          <div class="ss-check" [class.ss-check--done]="selectedDroppingPointId > 0">
+            <span class="ss-check__dot"></span>
+            Dropping point confirmed
+          </div>
+        </div>
+
+      </aside>
+    </div>
+
+  </div>
+</main>

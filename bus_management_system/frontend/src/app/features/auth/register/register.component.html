@@ -1,0 +1,66 @@
+<main class="auth-page">
+  <div class="auth-shell container py-4 py-lg-5">
+    <div class="auth-card shadow-lg">
+      <section class="brand-panel">
+        <div class="brand-content">
+          <p class="brand-tag">Join BusMate</p>
+          <h1>Your next trip starts here</h1>
+          <p class="brand-text">Create your account and discover buses, routes, and better travel options in seconds.</p>
+        </div>
+      </section>
+
+      <section class="form-panel">
+        <div class="form-wrap">
+          <h2 class="h3 fw-bold mb-2">Create user account</h2>
+          <p class="text-secondary mb-4">Sign up to search and book buses in minutes.</p>
+
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+            <div class="row g-3">
+              <div class="col-12 col-md-6">
+                <label class="form-label fw-semibold">Name</label>
+                <input class="form-control" formControlName="name" />
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label fw-semibold">Email</label>
+                <input class="form-control" type="email" formControlName="email" />
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-semibold">Phone</label>
+                <input class="form-control" formControlName="phone" />
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label fw-semibold">Password</label>
+                <div class="input-group">
+                  <input [type]="showPassword ? 'text' : 'password'" class="form-control" formControlName="password" />
+                  <button class="btn btn-outline-secondary" type="button" (click)="togglePasswordVisibility()">
+                    {{ showPassword ? 'Hide' : 'Show' }}
+                  </button>
+                </div>
+                <small class="text-secondary">Strength: {{ passwordStrength }}</small>
+              </div>
+              <div class="col-12 col-md-6">
+                <label class="form-label fw-semibold">Confirm password</label>
+                <div class="input-group">
+                  <input [type]="showConfirmPassword ? 'text' : 'password'" class="form-control" formControlName="confirmPassword" />
+                  <button class="btn btn-outline-secondary" type="button" (click)="toggleConfirmPasswordVisibility()">
+                    {{ showConfirmPassword ? 'Hide' : 'Show' }}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="passwordMismatch" class="invalid-note mt-2">Passwords do not match.</div>
+            <div *ngIf="errorMessage" class="alert alert-danger py-2 mt-3">{{ errorMessage }}</div>
+
+            <button class="btn btn-danger w-100 mt-3" type="submit" [disabled]="isSubmitting">
+              <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+              {{ isSubmitting ? 'Creating account...' : 'Create account' }}
+            </button>
+
+            <a routerLink="/auth/login" class="btn btn-link w-100 mt-2">Already have an account? Sign in</a>
+          </form>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>

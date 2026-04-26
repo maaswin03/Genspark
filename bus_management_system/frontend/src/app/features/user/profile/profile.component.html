@@ -1,0 +1,102 @@
+<main class="bk-page">
+  <div class="container-xl bk-layout" style="max-width:760px">
+
+    <div class="bk-header">
+      <div>
+        <span class="bk-eyebrow">My Account</span>
+        <h1 class="bk-title">Profile Settings</h1>
+      </div>
+    </div>
+
+    <div class="bk-loading" *ngIf="isLoading">
+      <div class="bk-spinner"></div>
+      <span>Loading profile…</span>
+    </div>
+
+    <div *ngIf="errorMessage" class="bk-alert bk-alert--error">{{ errorMessage }}</div>
+    <div *ngIf="successMessage" class="bk-alert bk-alert--success">{{ successMessage }}</div>
+
+    <ng-container *ngIf="!isLoading && profile">
+
+      <!-- Profile header -->
+      <div class="bk-card">
+        <div class="bk-profile-header">
+          <div class="bk-avatar">{{ profile.name?.charAt(0) || 'U' }}</div>
+          <div>
+            <div class="bk-profile-name">{{ profile.name }}</div>
+            <div class="bk-profile-email">{{ profile.email }}</div>
+          </div>
+        </div>
+
+        <!-- Profile form -->
+        <form [formGroup]="profileForm" (ngSubmit)="saveProfile()">
+          <h3 class="bk-card__title">Personal Information</h3>
+          <div class="bk-fields bk-fields-2">
+            <div class="bk-field">
+              <label class="bk-field__label">Full Name</label>
+              <input type="text" class="bk-field__input"
+                [class.bk-field__input--error]="profileForm.controls.name.invalid && profileForm.controls.name.touched"
+                formControlName="name" placeholder="Your name" />
+            </div>
+            <div class="bk-field">
+              <label class="bk-field__label">Phone</label>
+              <input type="tel" class="bk-field__input"
+                [class.bk-field__input--error]="profileForm.controls.phone.invalid && profileForm.controls.phone.touched"
+                formControlName="phone" placeholder="+91 XXXXX XXXXX" />
+            </div>
+            <div class="bk-field">
+              <label class="bk-field__label">Email (read-only)</label>
+              <input type="email" class="bk-field__input" formControlName="email" />
+            </div>
+            <div class="bk-field">
+              <label class="bk-field__label">Member Since</label>
+              <input type="text" class="bk-field__input" formControlName="createdAt" />
+            </div>
+          </div>
+          <div style="margin-top:1rem">
+            <button type="submit" class="bk-btn bk-btn--primary" [disabled]="profileForm.invalid || isSavingProfile">
+              {{ isSavingProfile ? 'Saving…' : 'Save Changes' }}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Password change -->
+      <div class="bk-card">
+        <h3 class="bk-card__title">Change Password</h3>
+        <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+          <div class="bk-fields">
+            <div class="bk-field">
+              <label class="bk-field__label">Current Password</label>
+              <input type="password" class="bk-field__input"
+                [class.bk-field__input--error]="passwordForm.controls.currentPassword.invalid && passwordForm.controls.currentPassword.touched"
+                formControlName="currentPassword" placeholder="Current password" />
+            </div>
+            <div class="bk-field">
+              <label class="bk-field__label">New Password</label>
+              <input type="password" class="bk-field__input"
+                [class.bk-field__input--error]="passwordForm.controls.newPassword.invalid && passwordForm.controls.newPassword.touched"
+                formControlName="newPassword" placeholder="Min 8 characters" />
+            </div>
+            <div class="bk-field">
+              <label class="bk-field__label">Confirm New Password</label>
+              <input type="password" class="bk-field__input"
+                [class.bk-field__input--error]="!passwordsMatch && passwordForm.controls.confirmPassword.touched"
+                formControlName="confirmPassword" placeholder="Repeat new password" />
+              <span class="bk-field__error" *ngIf="!passwordsMatch && passwordForm.controls.confirmPassword.touched">
+                Passwords do not match
+              </span>
+            </div>
+          </div>
+          <div style="margin-top:1rem">
+            <button type="submit" class="bk-btn bk-btn--primary"
+              [disabled]="passwordForm.invalid || !passwordsMatch || isSavingPassword">
+              {{ isSavingPassword ? 'Updating…' : 'Update Password' }}
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </ng-container>
+  </div>
+</main>

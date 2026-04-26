@@ -1,0 +1,109 @@
+<main class="bk-page">
+  <div class="container-xl bk-layout">
+
+    <!-- Loading -->
+    <div class="bk-loading" *ngIf="isLoading">
+      <div class="bk-spinner"></div>
+      <span>Loading booking details…</span>
+    </div>
+
+    <ng-container *ngIf="!isLoading">
+      <div class="bk-header">
+        <div>
+          <a routerLink="/user/bookings" class="bk-back">&#8592; My Bookings</a>
+          <h1 class="bk-title" style="margin-top:0.75rem">Booking #{{ bookingId }}</h1>
+          <p class="bk-subtitle" *ngIf="booking">{{ booking.routeName }}</p>
+        </div>
+        <div class="bk-header__right" *ngIf="booking">
+          <span class="bk-status-badge"
+            [class.bk-status-badge--confirmed]="normalize(booking.status)==='1'||normalize(booking.status)==='confirmed'"
+            [class.bk-status-badge--cancelled]="normalize(booking.status)==='3'||normalize(booking.status)==='cancelled'"
+            [class.bk-status-badge--paid]="normalize(booking.paymentStatus)==='1'||normalize(booking.paymentStatus)==='success'">
+            {{ normalize(booking.status)==='1'||normalize(booking.status)==='confirmed' ? 'Confirmed'
+               : normalize(booking.status)==='3'||normalize(booking.status)==='cancelled' ? 'Cancelled' : 'Pending' }}
+          </span>
+          <a [routerLink]="['/bookings', bookingId, 'payment']" class="bk-btn bk-btn--primary" *ngIf="showPayAction()">Pay Now</a>
+          <button type="button" class="bk-btn bk-btn--danger" (click)="openBookingCancel()" *ngIf="canCancelBooking()">Cancel</button>
+        </div>
+      </div>
+
+      <div *ngIf="errorMessage" class="bk-alert bk-alert--error">{{ errorMessage }}</div>
+      <div *ngIf="successMessage" class="bk-alert bk-alert--success">{{ successMessage }}</div>
+
+      <div class="bk-body" *ngIf="booking">
+        <section class="bk-main">
+          <div class="bk-card">
+            <h3 class="bk-card__title">Trip Details</h3>
+            <div class="bk-detail-grid">
+              <div class="bk-detail-row bk-detail-row--full">
+                <span class="bk-detail-label">Route</span>
+                <span class="bk-detail-value">{{ booking.routeName }}</span>
+              </div>
+              <div class="bk-detail-row">
+                <span class="bk-detail-label">Departure</span>
+                <span class="bk-detail-value">{{ booking.departureTime | date:'EEE, d MMM · h:mm a' }}</span>
+              </div>
+              <div class="bk-detail-row">
+                <span class="bk-detail-label">Arrival</span>
+                <span class="bk-detail-value">{{ booking.arrivalTime | date:'EEE, d MMM · h:mm a' }}</span>
+              </div>
+              <div class="bk-detail-row">
+                <span class="bk-detail-label">Booked On</span>
+                <span class="bk-detail-value">{{ booking.bookingDate | date:'d MMM yyyy' }}</span>
+              </div>
+              <div class="bk-detail-row">
+                <span class="bk-detail-label">Payment</span>
+                <span class="bk-detail-value">{{ booking.paymentStatus || 'Pending' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bk-card">
+            <h3 class="bk-card__title">Passengers</h3>
+            <div class="bk-passengers">
+              <div class="bk-passenger" *ngFor="let seat of booking.seats">
+                <div class="bk-passenger__avatar">{{ seat.passengerName?.charAt(0) || 'P' }}</div>
+                <div class="bk-passenger__info">
+                  <div class="bk-passenger__name">{{ seat.passengerName }}</div>
+                  <div class="bk-passenger__meta">Seat {{ seat.seatNumber }} · Age {{ seat.passengerAge }} · {{ formatGender(seat.passengerGender) }}</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:0.5rem;flex-shrink:0">
+                  <span class="bk-passenger__fare" [class.bk-passenger__fare--cancelled]="isSeatCancelled(seat)">₹{{ seat.amountPaid | number:'1.0-0' }}</span>
+                  <button type="button" class="bk-btn bk-btn--danger" style="padding:0.3rem 0.65rem;font-size:0.75rem"
+                    *ngIf="canCancelSeat(seat)" (click)="openSeatCancel(seat)">Cancel</button>
+                  <span *ngIf="isSeatCancelled(seat)" style="font-size:0.75rem;color:#dc2626;font-weight:700;padding:0.25rem 0.5rem;background:#fef2f2;border-radius:6px;border:1px solid #fecaca">Cancelled</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="bk-sidebar">
+          <div class="bk-card">
+            <h3 class="bk-card__title">Fare Breakdown</h3>
+            <div class="bk-summary">
+              <div class="bk-summary__row" *ngFor="let seat of booking.seats">
+                <span class="bk-summary__label" [style.text-decoration]="isSeatCancelled(seat) ? 'line-through' : 'none'">Seat {{ seat.seatNumber }}</span>
+                <span class="bk-summary__value" [style.text-decoration]="isSeatCancelled(seat) ? 'line-through' : 'none'">₹{{ seat.amountPaid | number:'1.0-0' }}</span>
+              </div>
+              <div class="bk-summary__row" *ngIf="booking.platformFee">
+                <span class="bk-summary__label">Platform Fee</span>
+                <span class="bk-summary__value">₹{{ booking.platformFee | number:'1.2-2' }}</span>
+              </div>
+              <div class="bk-summary__row bk-summary__row--total">
+                <span class="bk-summary__label">Total</span>
+                <span class="bk-summary__value bk-summary__value--big">₹{{ booking.totalAmount | number:'1.0-0' }}</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </ng-container>
+  </div>
+
+  <app-confirm-modal *ngIf="showCancelModal" [open]="showCancelModal"
+    [title]="modalTitle()" [message]="modalMessage()"
+    confirmLabel="Yes, Cancel" [processing]="isCancelling"
+    (confirm)="confirmCancel()" (cancel)="closeModal()">
+  </app-confirm-modal>
+</main>

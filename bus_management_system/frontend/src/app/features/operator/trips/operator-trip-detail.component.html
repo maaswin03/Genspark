@@ -1,0 +1,110 @@
+<section class="trip-detail-page">
+  <div class="d-flex justify-content-between align-items-start mb-3 flex-wrap gap-2">
+    <div>
+      <h2 class="h4 fw-bold mb-1">Trip Detail</h2>
+      <p class="text-secondary mb-0">Seat map, pricing and passenger manifest for this trip.</p>
+    </div>
+    <a routerLink="/operator/trips" class="btn btn-outline-secondary">Back to Trips</a>
+  </div>
+
+  <div *ngIf="message" class="alert" [class.alert-success]="messageTone === 'success'" [class.alert-danger]="messageTone === 'danger'">
+    {{ message }}
+  </div>
+
+  <div *ngIf="isLoading" class="alert alert-light border d-flex align-items-center gap-2 mb-3">
+    <div class="spinner-border spinner-border-sm text-danger" role="status"></div>
+    <span>Loading trip detail...</span>
+  </div>
+
+  <ng-container *ngIf="tripDetail && !isLoading">
+    <section class="content-card mb-3">
+      <h3 class="h6 fw-bold mb-3">Trip Info</h3>
+      <div class="row g-3">
+        <div class="col-12 col-md-3">
+          <p class="meta-label">Route</p>
+          <p class="meta-value">{{ tripDetail.routeName }}</p>
+        </div>
+        <div class="col-12 col-md-3">
+          <p class="meta-label">Bus</p>
+          <p class="meta-value">{{ tripDetail.busNumber }}</p>
+        </div>
+        <div class="col-12 col-md-3">
+          <p class="meta-label">Departure</p>
+          <p class="meta-value">{{ tripDetail.departureTime | date: 'medium' }}</p>
+        </div>
+        <div class="col-12 col-md-3">
+          <p class="meta-label">Arrival</p>
+          <p class="meta-value">{{ tripDetail.arrivalTime | date: 'medium' }}</p>
+        </div>
+      </div>
+      <div class="mt-2">
+        <app-admin-badge [text]="statusLabel(tripDetail.status)" [tone]="statusTone(tripDetail.status)"></app-admin-badge>
+      </div>
+    </section>
+
+    <section class="content-card mb-3">
+      <h3 class="h6 fw-bold mb-3">Seat Map</h3>
+      <app-operator-seat-map [seats]="tripDetail.seats" [bookedSeatNumbers]="bookedSeatNumbers"></app-operator-seat-map>
+    </section>
+
+    <section class="content-card mb-3">
+      <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <h3 class="h6 fw-bold mb-0">Seat Pricing</h3>
+        <button type="button" class="btn btn-danger" [disabled]="isSavingPricing" (click)="savePricing()">
+          {{ isSavingPricing ? 'Saving...' : 'Save Pricing' }}
+        </button>
+      </div>
+
+      <form [formGroup]="pricingForm" novalidate>
+        <app-admin-table-shell>
+          <thead>
+            <tr>
+              <th>Seat Number</th>
+              <th>Deck</th>
+              <th>Current Price</th>
+            </tr>
+          </thead>
+          <tbody formArrayName="prices">
+            <tr *ngFor="let row of pricesArray.controls; let index = index" [formGroupName]="index">
+              <td>{{ row.get('seatNumber')?.value }}</td>
+              <td>{{ row.get('deck')?.value }}</td>
+              <td>
+                <input type="number" class="form-control form-control-sm price-input" min="1" formControlName="price" />
+              </td>
+            </tr>
+          </tbody>
+        </app-admin-table-shell>
+      </form>
+    </section>
+
+    <section class="content-card">
+      <h3 class="h6 fw-bold mb-3">Passenger Manifest</h3>
+      <app-admin-table-shell>
+        <thead>
+          <tr>
+            <th>Seat</th>
+            <th>Passenger Name</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of manifestRows">
+            <td>{{ row.seatNumber }}</td>
+            <td>{{ row.passengerName }}</td>
+            <td>{{ row.age ?? '-' }}</td>
+            <td>{{ formatGender(row.gender) }}</td>
+            <td>
+              <app-admin-badge [text]="statusLabel(row.bookingStatus, 'seat')" [tone]="statusTone(row.bookingStatus, 'seat')"></app-admin-badge>
+            </td>
+          </tr>
+
+          <tr *ngIf="manifestRows.length === 0">
+            <td colspan="5" class="text-center text-secondary py-4">No passenger records found for this trip yet.</td>
+          </tr>
+        </tbody>
+      </app-admin-table-shell>
+    </section>
+  </ng-container>
+</section>

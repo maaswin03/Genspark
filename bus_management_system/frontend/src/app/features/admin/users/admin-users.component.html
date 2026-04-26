@@ -1,0 +1,99 @@
+<section class="admin-page">
+  <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap mb-3">
+    <div>
+      <h2 class="h4 fw-bold mb-1">Users</h2>
+      <p class="text-secondary mb-0">Review registered users and control account access.</p>
+    </div>
+  </div>
+
+  <div *ngIf="message" class="alert" [class.alert-success]="messageTone === 'success'" [class.alert-danger]="messageTone === 'danger'">
+    {{ message }}
+  </div>
+
+  <div class="toolbar mb-3">
+    <div class="role-filters">
+      <button class="btn btn-sm" [class.btn-danger]="roleFilter === 'all'" [class.btn-outline-secondary]="roleFilter !== 'all'" (click)="setRoleFilter('all')">
+        All
+      </button>
+      <button class="btn btn-sm" [class.btn-danger]="roleFilter === 'user'" [class.btn-outline-secondary]="roleFilter !== 'user'" (click)="setRoleFilter('user')">
+        User
+      </button>
+      <button class="btn btn-sm" [class.btn-danger]="roleFilter === 'operator'" [class.btn-outline-secondary]="roleFilter !== 'operator'" (click)="setRoleFilter('operator')">
+        Operator
+      </button>
+    </div>
+
+    <input
+      class="form-control"
+      type="search"
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="applyFilters()"
+      placeholder="Search by name or email"
+      aria-label="Search users"
+    />
+  </div>
+
+  <div *ngIf="isLoading" class="alert alert-light border d-flex align-items-center gap-2 mb-3">
+    <div class="spinner-border spinner-border-sm text-danger" role="status" aria-label="Loading users"></div>
+    <span>Loading users...</span>
+  </div>
+
+  <app-admin-table-shell>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Role</th>
+        <th>Active Status</th>
+        <th class="text-end">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of filteredUsers">
+        <td class="fw-semibold">{{ user.name || 'N/A' }}</td>
+        <td>{{ user.email || 'N/A' }}</td>
+        <td>{{ user.phone || 'N/A' }}</td>
+        <td>
+          <app-admin-badge [text]="user.role || 'Unknown'" [tone]="roleTone(user.role)"></app-admin-badge>
+        </td>
+        <td>
+          <app-admin-badge [text]="user.isActive ? 'Active' : 'Inactive'" [tone]="user.isActive ? 'success' : 'dark'"></app-admin-badge>
+        </td>
+        <td class="text-end">
+          <button
+            class="btn btn-sm btn-outline-dark"
+            type="button"
+            (click)="openDeactivateModal(user)"
+            [disabled]="!user.isActive"
+          >
+            Deactivate
+          </button>
+        </td>
+      </tr>
+
+      <tr *ngIf="!isLoading && filteredUsers.length === 0">
+        <td colspan="7" class="text-center text-secondary py-4">No users found for current filters.</td>
+      </tr>
+    </tbody>
+  </app-admin-table-shell>
+</section>
+
+<app-admin-modal
+  [open]="isDeactivateModalOpen"
+  title="Deactivate User"
+  subtitle="This user will not be able to access the platform."
+  (closed)="closeDeactivateModal()"
+>
+  <p class="mb-3">Are you sure you want to deactivate <strong>{{ selectedUser?.name }}</strong>?</p>
+  <div class="d-flex justify-content-end gap-2">
+    <button class="btn btn-outline-secondary" type="button" (click)="closeDeactivateModal()" [disabled]="isUpdating">Cancel</button>
+    <button class="btn btn-danger" type="button" (click)="deactivateSelectedUser()" [disabled]="isUpdating">
+      <span *ngIf="!isUpdating">Confirm Deactivate</span>
+      <span *ngIf="isUpdating" class="d-inline-flex align-items-center gap-2">
+        <span class="spinner-border spinner-border-sm"></span>
+        Deactivating...
+      </span>
+    </button>
+  </div>
+</app-admin-modal>

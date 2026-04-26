@@ -1,0 +1,191 @@
+<section class="admin-page">
+  <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap mb-3">
+    <div>
+      <h2 class="h4 fw-bold mb-1">Routes</h2>
+      <p class="text-secondary mb-0">Manage active routes, distance, and stop mappings.</p>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-danger" type="button" (click)="openRouteModal()">Add Route</button>
+    </div>
+  </div>
+
+  <div *ngIf="message" class="alert" [class.alert-success]="messageTone === 'success'" [class.alert-danger]="messageTone === 'danger'">
+    {{ message }}
+  </div>
+
+  <div class="filter-pills mb-3">
+    <button class="btn btn-sm" [class.btn-danger]="activeFilter === 'all'" [class.btn-outline-secondary]="activeFilter !== 'all'" (click)="applyFilter('all')">
+      All
+    </button>
+    <button class="btn btn-sm" [class.btn-danger]="activeFilter === 'active'" [class.btn-outline-secondary]="activeFilter !== 'active'" (click)="applyFilter('active')">
+      Active
+    </button>
+    <button class="btn btn-sm" [class.btn-danger]="activeFilter === 'inactive'" [class.btn-outline-secondary]="activeFilter !== 'inactive'" (click)="applyFilter('inactive')">
+      Inactive
+    </button>
+  </div>
+
+  <div *ngIf="isLoading" class="alert alert-light border d-flex align-items-center gap-2 mb-3">
+    <div class="spinner-border spinner-border-sm text-danger" role="status" aria-label="Loading routes"></div>
+    <span>Loading routes...</span>
+  </div>
+
+  <app-admin-table-shell>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Source → Destination</th>
+        <th>Distance (km)</th>
+        <th>Active Status</th>
+        <th>Stop Count</th>
+        <th class="text-end">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let route of filteredRoutes">
+        <tr>
+          <td>
+            <button class="btn btn-sm btn-outline-secondary" type="button" (click)="toggleExpand(route.id)">
+              {{ isExpanded(route.id) ? '−' : '+' }}
+            </button>
+          </td>
+          <td class="fw-semibold">{{ route.sourceName }} → {{ route.destinationName }}</td>
+          <td>{{ route.distanceKm }}</td>
+          <td>
+            <app-admin-badge [text]="route.isActive ? 'Active' : 'Inactive'" [tone]="route.isActive ? 'success' : 'dark'"></app-admin-badge>
+          </td>
+          <td>{{ route.stops.length }}</td>
+          <td class="text-end">
+            <div class="d-inline-flex gap-1 justify-content-end">
+              <button class="btn btn-sm btn-outline-primary" type="button" (click)="openStopsModal(route)">Add Stops</button>
+              <button class="btn btn-sm btn-outline-dark" type="button" (click)="toggleRoute(route.id)">
+                {{ route.isActive ? 'Deactivate' : 'Activate' }}
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <tr *ngIf="isExpanded(route.id)">
+          <td colspan="6" class="bg-light-subtle">
+            <div *ngIf="route.stops.length === 0" class="text-secondary py-2">No stops configured yet.</div>
+            <div *ngIf="route.stops.length > 0" class="stops-wrap">
+              <div class="small text-secondary mb-2">Ordered stops</div>
+              <ol class="mb-0">
+                <li *ngFor="let stop of route.stops">
+                  {{ stop.locationName }}
+                  <span class="text-secondary">(Order {{ stop.stopOrder }}, {{ stop.distanceFromSource }} km)</span>
+                </li>
+              </ol>
+            </div>
+          </td>
+        </tr>
+      </ng-container>
+
+      <tr *ngIf="!isLoading && filteredRoutes.length === 0">
+        <td colspan="6" class="text-center text-secondary py-4">No routes available for this filter.</td>
+      </tr>
+    </tbody>
+  </app-admin-table-shell>
+</section>
+
+<app-admin-modal
+  [open]="isRouteModalOpen"
+  title="Add Route"
+  subtitle="Choose source, destination and distance"
+  (closed)="closeRouteModal()"
+>
+  <form [formGroup]="routeForm" (ngSubmit)="submitRoute()" novalidate>
+    <div class="row g-3">
+      <div class="col-12 col-md-6">
+        <label class="form-label">Source</label>
+        <select class="form-select" formControlName="sourceId">
+          <option [ngValue]="null">Select source</option>
+          <option *ngFor="let location of locations" [ngValue]="location.id">{{ locationLabel(location.id) }}</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-6">
+        <label class="form-label">Destination</label>
+        <select class="form-select" formControlName="destinationId">
+          <option [ngValue]="null">Select destination</option>
+          <option *ngFor="let location of locations" [ngValue]="location.id">{{ locationLabel(location.id) }}</option>
+        </select>
+      </div>
+      <div class="col-12">
+        <label class="form-label">Distance (km)</label>
+        <input class="form-control" type="number" min="1" formControlName="distanceKm" />
+      </div>
+    </div>
+
+    <div class="text-danger small mt-2" *ngIf="routeForm.invalid && (routeForm.touched || routeForm.dirty)">
+      Fill all fields. Source and destination must be different.
+    </div>
+
+    <div class="d-flex justify-content-end gap-2 mt-3">
+      <button class="btn btn-outline-secondary" type="button" (click)="closeRouteModal()" [disabled]="isSavingRoute">Cancel</button>
+      <button class="btn btn-danger" type="submit" [disabled]="isSavingRoute">
+        <span *ngIf="!isSavingRoute">Create Route</span>
+        <span *ngIf="isSavingRoute" class="d-inline-flex align-items-center gap-2">
+          <span class="spinner-border spinner-border-sm"></span>
+          Saving...
+        </span>
+      </button>
+    </div>
+  </form>
+</app-admin-modal>
+
+<app-admin-modal
+  [open]="isStopsModalOpen"
+  [title]="'Add Stops: ' + (selectedRouteForStops?.sourceName || '') + ' → ' + (selectedRouteForStops?.destinationName || '')"
+  subtitle="Stops must be ordered and distance should increase"
+  (closed)="closeStopsModal()"
+>
+  <form [formGroup]="stopsForm" (ngSubmit)="submitStops()" novalidate>
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <p class="small text-secondary mb-0">Stops list</p>
+      <button class="btn btn-sm btn-outline-primary" type="button" (click)="addStopRow()">Add Stop</button>
+    </div>
+
+    <div formArrayName="stops" class="d-grid gap-2">
+      <div class="stop-row" *ngFor="let stopControl of stopsArray.controls; let i = index" [formGroupName]="i">
+        <div>
+          <label class="form-label small">Location</label>
+          <select class="form-select form-select-sm" formControlName="locationId">
+            <option [ngValue]="null">Select location</option>
+            <option *ngFor="let location of locations" [ngValue]="location.id">{{ locationLabel(location.id) }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="form-label small">Order</label>
+          <input class="form-control form-control-sm" type="number" min="1" formControlName="stopOrder" />
+        </div>
+
+        <div>
+          <label class="form-label small">Distance from source</label>
+          <input class="form-control form-control-sm" type="number" min="0" formControlName="distanceFromSource" />
+        </div>
+
+        <div class="d-flex align-items-end">
+          <button class="btn btn-sm btn-outline-danger w-100" type="button" (click)="removeStopRow(i)" [disabled]="stopsArray.length <= 2">
+            Remove
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-danger small mt-2" *ngIf="stopsForm.invalid && (stopsForm.touched || stopsForm.dirty)">
+      Check location, order, and distance for all stops.
+    </div>
+
+    <div class="d-flex justify-content-end gap-2 mt-3">
+      <button class="btn btn-outline-secondary" type="button" (click)="closeStopsModal()" [disabled]="isSavingStops">Cancel</button>
+      <button class="btn btn-danger" type="submit" [disabled]="isSavingStops">
+        <span *ngIf="!isSavingStops">Save Stops</span>
+        <span *ngIf="isSavingStops" class="d-inline-flex align-items-center gap-2">
+          <span class="spinner-border spinner-border-sm"></span>
+          Saving...
+        </span>
+      </button>
+    </div>
+  </form>
+</app-admin-modal>

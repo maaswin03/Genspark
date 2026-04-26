@@ -1,0 +1,325 @@
+<section class="buses-page">
+  <div class="d-flex justify-content-between align-items-start mb-3 flex-wrap gap-2">
+    <div>
+      <h2 class="h4 fw-bold mb-1">My Buses</h2>
+      <p class="text-secondary mb-0">Manage your fleet, seat layouts, and bus availability.</p>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+      <button type="button" class="btn btn-danger" (click)="openCreateBus()">Add New Bus</button>
+    </div>
+  </div>
+
+  <div *ngIf="message" class="alert" [class.alert-success]="messageTone === 'success'" [class.alert-danger]="messageTone === 'danger'">
+    {{ message }}
+  </div>
+
+  <div *ngIf="isLoading" class="alert alert-light border d-flex align-items-center gap-2 mb-3">
+    <div class="spinner-border spinner-border-sm text-danger" role="status" aria-label="Loading buses"></div>
+    <span>Loading buses...</span>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-12 col-md-6 col-xl-4" *ngFor="let bus of buses">
+      <article class="bus-card h-100">
+        <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+          <div>
+            <p class="text-secondary small mb-1">Bus Number</p>
+            <h3 class="h5 fw-bold mb-0">{{ bus.busNumber }}</h3>
+          </div>
+          <app-admin-badge [text]="bus.isActive ? 'Active' : 'Inactive'" [tone]="getActiveTone(bus)"></app-admin-badge>
+        </div>
+
+        <div class="bus-meta mb-3">
+          <div>
+            <p class="text-secondary small mb-1">Bus Type</p>
+            <p class="fw-semibold mb-0">{{ getBusTypeLabel(bus.busType) }}</p>
+          </div>
+          <div>
+            <p class="text-secondary small mb-1">Total Seats</p>
+            <p class="fw-semibold mb-0">{{ bus.totalSeats }}</p>
+          </div>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2">
+          <button type="button" class="btn btn-outline-secondary btn-sm" (click)="viewSeatLayout(bus)">View Seat Layout</button>
+          <button type="button" class="btn btn-outline-secondary btn-sm" (click)="openEditBus(bus)">Edit Bus</button>
+          <button type="button" class="btn btn-outline-danger btn-sm" *ngIf="bus.isActive" (click)="openDeactivate(bus)">Deactivate</button>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && buses.length === 0" class="empty-state mt-3">
+    No buses added yet.
+  </div>
+</section>
+
+<app-admin-modal
+  [open]="wizardOpen"
+  [maxWidth]="'760px'"
+  [title]="wizardMode === 'create' ? 'Add New Bus' : 'Edit Bus'"
+  subtitle="Build the bus details, seat grid, and review before saving."
+  (closed)="closeWizard()"
+>
+  <div class="wizard-steps mb-3">
+    <button type="button" class="wizard-step" [class.active]="wizardStep === 1">1. Bus Details</button>
+    <button type="button" class="wizard-step" [class.active]="wizardStep === 2">2. Seat Layout Builder</button>
+    <button type="button" class="wizard-step" [class.active]="wizardStep === 3">3. Review & Confirm</button>
+  </div>
+
+  <form [formGroup]="busForm" class="wizard-form" novalidate>
+    <section *ngIf="wizardStep === 1" class="wizard-panel">
+      <div class="row g-3">
+        <div class="col-12 col-md-6">
+          <label class="form-label">Bus Number</label>
+          <input class="form-control" formControlName="busNumber" placeholder="TN 37 ET 4632" (blur)="formatBusNumber()" />
+          <div class="text-danger small mt-1" *ngIf="busForm.controls.busNumber.touched && busForm.controls.busNumber.invalid">
+            Use format: TN 37 ET 4632.
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+          <label class="form-label">Bus Type</label>
+          <select class="form-select" formControlName="busType">
+            <option *ngFor="let option of busTypeOptions" [ngValue]="option.value">{{ option.label }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row g-3 mt-1" *ngIf="isSeaterBus">
+        <div class="col-12 col-md-6">
+          <label class="form-label">Seater Layout</label>
+          <select class="form-select" formControlName="seaterPattern">
+            <option *ngFor="let pattern of seaterPatternOptions" [ngValue]="pattern.value">{{ pattern.label }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row g-3 mt-1">
+        <div class="col-12 col-md-6">
+          <label class="form-label">Rows per Deck</label>
+          <input class="form-control" type="number" min="1" max="20" formControlName="rowsPerDeck" />
+        </div>
+      </div>
+
+      <div class="text-secondary small mt-3">{{ getLayoutNote() }}</div>
+    </section>
+
+    <section *ngIf="wizardStep === 2" class="wizard-panel">
+      <div class="row g-3 mb-3">
+        <div class="col-12 col-md-6" *ngFor="let total of getSeatTotalsByDeck()">
+          <div class="review-box">
+            <p class="text-secondary small mb-1">{{ deckLabel(total.deck) }}</p>
+            <p class="fw-semibold mb-0">{{ total.total }} {{ selectedLayoutPreset.seatDisplayType | lowercase }}s</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3 deck-layout-grid">
+        <ng-container *ngFor="let deck of deckRenderOrder">
+          <section class="deck-column" *ngIf="deck === 'Single' || selectedLayoutPreset.decks.includes(deck)" [class]="getDeckColumnClass(deck)">
+            <div class="deck-block h-100 mb-0">
+              <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                <h4 class="h6 fw-bold mb-0">{{ deckLabel(deck) }}</h4>
+                <span class="text-secondary small">{{ getDeckRows(deck).length }} rows</span>
+              </div>
+
+              <div class="deck-grid">
+                <article class="seat-row-card" *ngFor="let row of getDeckRows(deck); trackBy: trackByDeckRow">
+                  <div class="row-head mb-2">
+                    <span class="fw-semibold">Row {{ row.row }}</span>
+                    <span class="text-secondary small">{{ deckLabel(deck) }}</span>
+                  </div>
+
+                  <div class="seat-row-structure">
+                    <div class="seat-side side-left">
+                      <div *ngFor="let seat of row.left" [class]="getSeatTileClass(seat.displayType)">
+                        <div class="fw-semibold">{{ seat.displayType }}</div>
+                        <div class="small text-secondary">{{ seat.seatNumber }}</div>
+                      </div>
+                    </div>
+
+                    <div class="seat-aisle" aria-hidden="true"></div>
+
+                    <div class="seat-side side-right">
+                      <div *ngFor="let seat of row.right" [class]="getSeatTileClass(seat.displayType)">
+                        <div class="fw-semibold">{{ seat.displayType }}</div>
+                        <div class="small text-secondary">{{ seat.seatNumber }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </section>
+        </ng-container>
+      </div>
+
+      <div class="text-secondary small mt-3">The layout is stored as a structured draft and previewed below. Active seats count: {{ seatLayout.length }}.</div>
+    </section>
+
+    <section *ngIf="wizardStep === 3" class="wizard-panel">
+      <div class="row g-3 mb-3">
+        <div class="col-12 col-md-4">
+          <div class="review-box">
+            <p class="text-secondary small mb-1">Bus Number</p>
+            <p class="fw-semibold mb-0">{{ busForm.controls.busNumber.value }}</p>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="review-box">
+            <p class="text-secondary small mb-1">Bus Type</p>
+            <p class="fw-semibold mb-0">{{ getBusTypeLabel(busForm.controls.busType.value ?? 0) }}</p>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="review-box">
+            <p class="text-secondary small mb-1">Total Seats</p>
+            <p class="fw-semibold mb-0">{{ seatLayout.length }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-3">
+        <div class="col-12 col-md-4" *ngFor="let summary of getSeatSummary()">
+          <div class="review-box">
+            <p class="text-secondary small mb-1">{{ deckLabel(summary.deck) }}</p>
+            <p class="fw-semibold mb-0">{{ summary.count }} seats</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3 deck-layout-grid">
+        <ng-container *ngFor="let deck of deckRenderOrder">
+          <section class="deck-column" *ngIf="deck === 'Single' || selectedLayoutPreset.decks.includes(deck)" [class]="getDeckColumnClass(deck)">
+            <div class="deck-block h-100 mb-0">
+              <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                <h4 class="h6 fw-bold mb-0">{{ deckLabel(deck) }}</h4>
+                <span class="text-secondary small">{{ getDeckRows(deck).length }} rows</span>
+              </div>
+
+              <div class="seat-preview-grid compact-grid">
+                <div class="seat-preview" *ngFor="let row of getDeckRows(deck)">
+                  <div class="fw-semibold mb-1">Row {{ row.row }}</div>
+                  <div class="small text-secondary">Left: {{ row.left.length }} {{ selectedLayoutPreset.seatDisplayType | lowercase }}s · Right: {{ row.right.length }} {{ selectedLayoutPreset.seatDisplayType | lowercase }}s</div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </ng-container>
+      </div>
+    </section>
+  </form>
+
+  <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap mt-3">
+    <button type="button" class="btn btn-outline-secondary" (click)="previousStep()" [disabled]="wizardStep === 1 || isSaving">Back</button>
+
+    <div class="d-flex gap-2 flex-wrap ms-auto">
+      <button type="button" class="btn btn-outline-secondary" (click)="closeWizard()" [disabled]="isSaving">Cancel</button>
+      <button *ngIf="wizardStep < 3" type="button" class="btn btn-danger" (click)="nextStep()">Next</button>
+      <button *ngIf="wizardStep === 3" type="button" class="btn btn-danger" (click)="submitBus()" [disabled]="isSaving">
+        <span *ngIf="!isSaving">{{ wizardMode === 'create' ? 'Create Bus' : 'Save Changes' }}</span>
+        <span *ngIf="isSaving" class="d-inline-flex align-items-center gap-2">
+          <span class="spinner-border spinner-border-sm"></span>
+          Saving...
+        </span>
+      </button>
+    </div>
+  </div>
+</app-admin-modal>
+
+<app-admin-modal
+  [open]="layoutOpen"
+  [maxWidth]="'760px'"
+  [title]="layoutBus?.busNumber ? 'Seat Layout - ' + layoutBus?.busNumber : 'Seat Layout'"
+  subtitle="Visual seat preview for the selected bus."
+  (closed)="closeLayout()"
+>
+  <div *ngIf="layoutBus" class="layout-view">
+    <div class="row g-3 mb-3">
+      <div class="col-12 col-md-4">
+        <div class="review-box">
+          <p class="text-secondary small mb-1">Bus Type</p>
+          <p class="fw-semibold mb-0">{{ getBusTypeLabel(layoutBus.busType) }}</p>
+        </div>
+      </div>
+      <div class="col-12 col-md-4">
+        <div class="review-box">
+          <p class="text-secondary small mb-1">Total Seats</p>
+          <p class="fw-semibold mb-0">{{ layoutBus.totalSeats }}</p>
+        </div>
+      </div>
+      <div class="col-12 col-md-4">
+        <div class="review-box">
+          <p class="text-secondary small mb-1">Status</p>
+          <app-admin-badge [text]="layoutBus.isActive ? 'Active' : 'Inactive'" [tone]="layoutBus.isActive ? 'success' : 'dark'"></app-admin-badge>
+        </div>
+      </div>
+    </div>
+
+    <div class="deck-tabs mb-3" *ngIf="layoutDecks().length > 0">
+      <button
+        type="button"
+        class="deck-tab"
+        *ngFor="let deck of layoutDecks()"
+        [class.active]="selectedLayoutDeck === deck"
+        (click)="selectedLayoutDeck = deck"
+      >
+        {{ deck }} Deck
+      </button>
+    </div>
+
+    <div class="deck-grid" *ngIf="getLayoutDeckRows(selectedLayoutDeck).length > 0; else emptyLayout">
+      <article class="seat-row-card" *ngFor="let row of getLayoutDeckRows(selectedLayoutDeck); trackBy: trackByDeckRow">
+        <div class="row-head mb-2">
+          <span class="fw-semibold">Row {{ row.row }}</span>
+          <span class="text-secondary small">{{ deckLabel(selectedLayoutDeck) }}</span>
+        </div>
+
+        <div class="seat-row-structure">
+          <div class="seat-side side-left">
+            <div *ngFor="let seat of row.left" [class]="getSeatTileClass(seat.displayType)">
+              <div class="fw-semibold">{{ seat.displayType }}</div>
+              <div class="small text-secondary">{{ seat.seatNumber }}</div>
+            </div>
+          </div>
+
+          <div class="seat-aisle" aria-hidden="true"></div>
+
+          <div class="seat-side side-right">
+            <div *ngFor="let seat of row.right" [class]="getSeatTileClass(seat.displayType)">
+              <div class="fw-semibold">{{ seat.displayType }}</div>
+              <div class="small text-secondary">{{ seat.seatNumber }}</div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <ng-template #emptyLayout>
+      <div class="empty-state">No seat data available for this deck.</div>
+    </ng-template>
+  </div>
+</app-admin-modal>
+
+<app-admin-modal
+  [open]="!!deactivateTarget"
+  title="Deactivate Bus"
+  subtitle="This will mark the bus as inactive for future use."
+  (closed)="closeDeactivate()"
+>
+  <p class="mb-3">
+    Deactivate bus <strong>{{ deactivateTarget?.busNumber }}</strong>? This can be reversed later if needed.
+  </p>
+
+  <div class="d-flex justify-content-end gap-2">
+    <button type="button" class="btn btn-outline-secondary" (click)="closeDeactivate()" [disabled]="isSaving">Cancel</button>
+    <button type="button" class="btn btn-danger" (click)="confirmDeactivate()" [disabled]="isSaving">
+      <span *ngIf="!isSaving">Deactivate</span>
+      <span *ngIf="isSaving" class="d-inline-flex align-items-center gap-2">
+        <span class="spinner-border spinner-border-sm"></span>
+        Saving...
+      </span>
+    </button>
+  </div>
+</app-admin-modal>

@@ -1,0 +1,47 @@
+<div class="admin-shell">
+  <aside class="sidebar" [class.open]="isSidebarOpen">
+    <div class="sidebar-head">
+      <div>
+        <p class="sidebar-kicker">BusMate</p>
+        <h1>Admin Panel</h1>
+      </div>
+      <button type="button" class="btn-close d-lg-none" aria-label="Close" (click)="closeSidebar()"></button>
+    </div>
+
+    <nav class="menu-list">
+      <a
+        *ngFor="let item of menuItems"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        class="menu-item"
+        (click)="closeSidebar()"
+      >
+        <span class="menu-icon">{{ item.icon }}</span>
+        <span>{{ item.label }}</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button
+        type="button"
+        class="btn btn-light position-relative w-100"
+        (click)="openNotifications()"
+        aria-label="Notifications"
+      >
+        <span>Notifications</span>
+        <span class="notif-badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+      </button>
+
+      <button type="button" class="btn btn-danger w-100" (click)="logout()">Logout</button>
+    </div>
+  </aside>
+
+  <div class="backdrop d-lg-none" *ngIf="isSidebarOpen" (click)="closeSidebar()"></div>
+
+  <div class="main-wrap">
+    <main class="content-area">
+      <button type="button" class="menu-toggle btn btn-danger d-lg-none" (click)="toggleSidebar()">☰</button>
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

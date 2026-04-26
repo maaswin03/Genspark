@@ -1,0 +1,52 @@
+/* ═══════════════════════════════════════════
+   BusMate — Global Styles
+   ═══════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+/* Global design tokens */
+:root {
+  --bm-red: #e11d48;
+  --bm-red-dark: #be123c;
+  --bm-red-light: rgba(225, 29, 72, 0.10);
+  --bm-dark: #0f172a;
+  --bm-dark-2: #1e293b;
+  --bm-text: #1e293b;
+  --bm-text-muted: #64748b;
+  --bm-border: #e2e8f0;
+  --bm-radius: 10px;
+  --bm-shadow: 0 4px 24px rgba(15, 23, 42, 0.10);
+  --bm-transition: 0.2s ease;
+  --bm-font: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  color-scheme: light;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--bm-font);
+  background: #f8fafc;
+  color: var(--bm-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Utility */
+.container-xl {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}

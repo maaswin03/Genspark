@@ -1,0 +1,93 @@
+<section class="revenue-page">
+  <header class="page-head">
+    <div>
+      <h2 class="h4 fw-bold mb-1">Revenue</h2>
+      <p class="text-secondary mb-0">Track monthly earnings, platform fee deductions, and trip-wise revenue.</p>
+    </div>
+    <div class="actions">
+      <input
+        type="month"
+        class="form-control"
+        [(ngModel)]="selectedMonth"
+        (ngModelChange)="onMonthChange()"
+        aria-label="Select revenue month"
+      />
+    </div>
+  </header>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+  <div *ngIf="isLoading" class="loading-box">
+    <span class="spinner-border spinner-border-sm text-danger" aria-hidden="true"></span>
+    <span>Loading revenue details...</span>
+  </div>
+
+  <ng-container *ngIf="!isLoading">
+    <section class="summary-grid">
+      <article class="summary-card">
+        <p>Total Net Earnings</p>
+        <h3>{{ summary.totalOperatorEarning | currency: 'INR' : 'symbol' : '1.0-2' }}</h3>
+      </article>
+      <article class="summary-card">
+        <p>Total Transactions</p>
+        <h3>{{ summary.totalTransactions }}</h3>
+      </article>
+      <article class="summary-card">
+        <p>Total Trips</p>
+        <h3>{{ totalTripsCount }}</h3>
+      </article>
+      <article class="summary-card">
+        <p>Avg Net / Trip</p>
+        <h3>{{ avgEarningPerTrip | currency: 'INR' : 'symbol' : '1.0-2' }}</h3>
+      </article>
+    </section>
+
+    <section class="summary-grid compact">
+      <article class="summary-card muted">
+        <p>Selected Month Net</p>
+        <h3>{{ filteredMonthNetEarnings | currency: 'INR' : 'symbol' : '1.0-2' }}</h3>
+      </article>
+      <article class="summary-card muted">
+        <p>Selected Month Bookings</p>
+        <h3>{{ filteredMonthBookings }}</h3>
+      </article>
+      <article class="summary-card muted">
+        <p>Trips In Month</p>
+        <h3>{{ filteredMonthTripsCount }}</h3>
+      </article>
+    </section>
+
+    <section class="chart-card">
+      <h3 class="h6 fw-bold mb-2">Earnings Trend (12 Months)</h3>
+      <div class="chart-wrap">
+        <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" [type]="'line'"></canvas>
+      </div>
+    </section>
+
+    <section class="table-card">
+      <app-admin-table-shell>
+        <thead>
+          <tr>
+            <th>Trip</th>
+            <th>Route</th>
+            <th>Departure</th>
+            <th>Bookings</th>
+            <th class="text-end">Net Earnings</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of filteredTripRows">
+            <td class="fw-semibold">#{{ row.tripId }}</td>
+            <td>{{ row.routeName }}</td>
+            <td>{{ row.departureTime | date: 'medium' }}</td>
+            <td>{{ row.totalBookings }}</td>
+            <td class="text-end fw-semibold text-success">{{ row.operatorEarning | currency: 'INR' : 'symbol' : '1.0-2' }}</td>
+          </tr>
+          <tr *ngIf="filteredTripRows.length === 0">
+            <td colspan="5" class="text-center text-secondary py-4">No trip revenue data found for the selected month.</td>
+          </tr>
+        </tbody>
+      </app-admin-table-shell>
+    </section>
+  </ng-container>
+</section>

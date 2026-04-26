@@ -1,0 +1,105 @@
+<!-- BusMate Top Navbar -->
+<nav class="bm-navbar">
+  <div class="bm-navbar__inner container-xl">
+
+    <!-- Brand -->
+    <a class="bm-navbar__brand" routerLink="/home">
+      <span class="bm-navbar__brand-mark">B</span>
+      <span class="bm-navbar__brand-name">BusMate</span>
+    </a>
+
+    <!-- Desktop Nav -->
+    <div class="bm-navbar__menu" [class.bm-navbar__menu--open]="!isMenuCollapsed">
+
+      <div class="bm-navbar__actions">
+        <ng-container *ngIf="isLoggedIn; else guestActions">
+          <a class="bm-nav-link" routerLink="/user/bookings" routerLinkActive="bm-nav-link--active" (click)="isMenuCollapsed = true">
+            My Bookings
+          </a>
+          <a class="bm-nav-link" routerLink="/user/notifications" routerLinkActive="bm-nav-link--active" (click)="isMenuCollapsed = true">
+            Notifications
+          </a>
+          <div class="bm-dropdown">
+            <button class="bm-avatar-btn" (click)="toggleDropdown()">
+              <span class="bm-avatar">{{ userName.charAt(0).toUpperCase() }}</span>
+              <span class="bm-avatar-name">{{ userName }}</span>
+              <span class="bm-avatar-caret">&#9660;</span>
+            </button>
+            <div class="bm-dropdown__menu" [class.bm-dropdown__menu--open]="dropdownOpen">
+              <a class="bm-dropdown__item" routerLink="/user/profile" (click)="closeDropdown()">
+                My Profile
+              </a>
+              <div class="bm-dropdown__divider"></div>
+              <button class="bm-dropdown__item bm-dropdown__item--danger" (click)="logout()">
+                Logout
+              </button>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-template #guestActions>
+          <a class="bm-btn bm-btn--ghost" routerLink="/auth/login" (click)="isMenuCollapsed = true">Login</a>
+          <a class="bm-btn bm-btn--primary" routerLink="/auth/register" (click)="isMenuCollapsed = true">Register</a>
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- Hamburger -->
+    <button class="bm-hamburger" (click)="toggleMenu()" [class.bm-hamburger--open]="!isMenuCollapsed" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+
+  </div>
+</nav>
+
+<!-- Page Content -->
+<main class="bm-main">
+  <router-outlet></router-outlet>
+</main>
+
+<!-- Footer -->
+<footer class="bm-footer">
+  <div class="container-xl">
+    <div class="bm-footer__grid">
+
+    <div class="bm-footer__brand">
+        <div class="bm-footer__logo">BusMate</div>
+        <p class="bm-footer__tagline">India's trusted platform for seamless, comfortable bus travel. Book smarter. Travel better.</p>
+        <div class="bm-footer__socials">
+          <a href="#" class="bm-social" aria-label="Twitter">X</a>
+          <a href="#" class="bm-social" aria-label="Instagram">IG</a>
+          <a href="#" class="bm-social" aria-label="Facebook">FB</a>
+        </div>
+      </div>
+
+      <div class="bm-footer__col">
+        <div class="bm-footer__col-title">Company</div>
+        <a href="#" class="bm-footer__link">About Us</a>
+        <a href="#" class="bm-footer__link">Careers</a>
+        <a href="#" class="bm-footer__link">Press</a>
+        <a href="#" class="bm-footer__link">Blog</a>
+      </div>
+
+      <div class="bm-footer__col">
+        <div class="bm-footer__col-title">Support</div>
+        <a href="#" class="bm-footer__link">Help Center</a>
+        <a href="#" class="bm-footer__link">Contact Us</a>
+        <a href="#" class="bm-footer__link">Cancellation Policy</a>
+        <a href="#" class="bm-footer__link">Refund Policy</a>
+      </div>
+
+      <div class="bm-footer__col">
+        <div class="bm-footer__col-title">Legal</div>
+        <a href="#" class="bm-footer__link">Terms of Service</a>
+        <a href="#" class="bm-footer__link">Privacy Policy</a>
+        <a href="#" class="bm-footer__link">Cookie Policy</a>
+      </div>
+
+    </div>
+
+    <div class="bm-footer__bottom">
+      <span>© {{ currentYear }} BusMate Technologies Pvt. Ltd. All rights reserved.</span>
+      <span class="bm-footer__made">Made in India</span>
+    </div>
+  </div>
+</footer>

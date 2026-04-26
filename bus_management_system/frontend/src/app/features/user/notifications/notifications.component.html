@@ -1,0 +1,89 @@
+<main class="bk-page">
+  <div class="container-xl bk-layout">
+
+    <!-- Header -->
+    <div class="bk-header">
+      <div>
+        <span class="bk-eyebrow">My Account</span>
+        <h1 class="bk-title">Notifications</h1>
+        <p class="bk-subtitle">Your booking, payment and system updates.</p>
+      </div>
+      <div class="bk-header__right" *ngIf="!isLoading">
+        <span class="notif-badge" *ngIf="unreadCount > 0">
+          {{ unreadCount }} unread
+        </span>
+        <button
+          type="button"
+          class="bk-btn bk-btn--ghost"
+          [disabled]="!unreadCount || isMarkingAll"
+          (click)="markAllRead()"
+        >
+          <svg *ngIf="isMarkingAll" class="notif-spin" viewBox="0 0 24 24" fill="none" width="14" height="14">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" stroke-dasharray="60" stroke-dashoffset="20"/>
+          </svg>
+          {{ isMarkingAll ? 'Marking…' : 'Mark All Read' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div *ngIf="errorMessage" class="bk-alert bk-alert--error">
+      <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16" style="flex-shrink:0">
+        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+      </svg>
+      {{ errorMessage }}
+    </div>
+
+    <!-- Loading skeleton -->
+    <div class="notif-skeleton" *ngIf="isLoading">
+      <div class="notif-skeleton__item" *ngFor="let i of [1,2,3,4,5]">
+        <div class="notif-skeleton__icon"></div>
+        <div class="notif-skeleton__lines">
+          <div class="notif-skeleton__line notif-skeleton__line--title"></div>
+          <div class="notif-skeleton__line notif-skeleton__line--msg"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div class="bk-empty" *ngIf="!isLoading && notifications.length === 0 && !errorMessage">
+      <div class="bk-empty__icon">🔔</div>
+      <div class="bk-empty__title">All caught up!</div>
+      <div class="bk-empty__sub">No notifications yet. We'll alert you when something happens.</div>
+    </div>
+
+    <!-- Notification list -->
+    <div class="notif-list" *ngIf="!isLoading && notifications.length > 0">
+      <button
+        type="button"
+        class="notif-item"
+        [class.notif-item--unread]="!item.isRead"
+        *ngFor="let item of notifications; trackBy: trackByNotification"
+        (click)="openNotification(item)"
+      >
+        <!-- Unread indicator -->
+        <span class="notif-item__dot" *ngIf="!item.isRead"></span>
+
+        <!-- Icon -->
+        <div class="notif-item__icon" [class.notif-item__icon--unread]="!item.isRead">
+          {{ iconFor(item) }}
+        </div>
+
+        <!-- Content -->
+        <div class="notif-item__body">
+          <div class="notif-item__head">
+            <span class="notif-item__title">{{ item.title }}</span>
+            <span class="notif-item__time">{{ timeAgo(item.createdAt) }}</span>
+          </div>
+          <p class="notif-item__msg">{{ item.message }}</p>
+        </div>
+
+        <!-- Chevron -->
+        <svg class="notif-item__chevron" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+          <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+        </svg>
+      </button>
+    </div>
+
+  </div>
+</main>

@@ -1,0 +1,20 @@
+<div class="confirm-backdrop" *ngIf="open" (click)="closeOnBackdrop($event)">
+  <section class="confirm-card" role="dialog" aria-modal="true" [attr.aria-label]="title">
+    <header class="confirm-head">
+      <h3 class="h6 fw-bold mb-1">{{ title }}</h3>
+    </header>
+
+    <div class="confirm-body">
+      <p class="mb-0 text-secondary">{{ message }}</p>
+    </div>
+
+    <footer class="confirm-actions">
+      <button type="button" class="btn btn-outline-secondary rounded-pill px-4" (click)="cancel.emit()" [disabled]="processing">
+        {{ cancelLabel }}
+      </button>
+      <button type="button" class="btn btn-danger rounded-pill px-4" (click)="confirm.emit()" [disabled]="processing">
+        {{ processing ? 'Processing...' : confirmLabel }}
+      </button>
+    </footer>
+  </section>
+</div>

@@ -1,0 +1,223 @@
+/* ═══════════════════════════════════════════
+   BusMate — Seat Map Component
+   Seater vs Berth distinction, aisle gap,
+   per-seat price display
+   ═══════════════════════════════════════════ */
+
+:host { display: block; }
+
+/* ── Deck tabs (sleeper only) ─────────────── */
+.deck-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.1rem;
+}
+
+.deck-btn {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  transition: all 0.15s;
+}
+
+.deck-btn:hover:not(.deck-btn-active) {
+  border-color: #e11d48;
+  color: #e11d48;
+  background: rgba(225,29,72,0.05);
+}
+
+.deck-btn-active {
+  background: #e11d48;
+  border-color: #e11d48;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(225,29,72,.25);
+}
+
+/* ── Seat map outer ───────────────────────── */
+.seat-map-wrap {
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+/* Bus body frame */
+.seat-map-bus {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1rem 1rem 1.25rem;
+  min-width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+/* Driver row indicator */
+.seat-map-driver {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0.3rem 0.5rem;
+  background: #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+/* ── Seat grid ─────────────────────────────
+   Key layout rules:
+   • column-gap: very tight (seats close together)
+   • The empty "aisle" column is 1fr wide = 
+     visually much wider than the 0.2rem gap,
+     creating the natural bus aisle feel
+   ────────────────────────────────────────── */
+.seat-map-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--columns), 1fr);
+  column-gap: 0.25rem;   /* tight seat-to-seat gap */
+  row-gap: 0.5rem;
+}
+
+/* Wider row gap for sleeper berths */
+.seat-map-grid--sleeper {
+  row-gap: 0.35rem;
+}
+
+/* ── Seat button (seater default) ─────────── */
+.seat-button {
+  width: 100%;
+  height: 56px;
+  border: 1.5px solid transparent;
+  border-radius: 8px 8px 5px 5px;
+  border-top-width: 4px;          /* chair back visual */
+  font-weight: 800;
+  font-size: 0.7rem;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-sizing: border-box;
+  padding: 0 2px;
+}
+
+.seat-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,.12);
+}
+
+.seat-button:disabled { cursor: not-allowed; }
+
+/* ── Sleeper berth override ───────────────── */
+.seat-button.seat-berth {
+  height: 80px;                   /* taller = fits lying person */
+  border-radius: 6px;
+  border-top-width: 1.5px;        /* berths don't have a chair back */
+  border-left-width: 4px;         /* thick left = headboard visual */
+}
+
+/* ── Seat content ─────────────────────────── */
+.seat-number {
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+.seat-price {
+  font-size: 0.62rem;
+  font-weight: 600;
+  opacity: 0.8;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+/* ── Seat states ──────────────────────────── */
+.seat-available {
+  background: #f0fdf4;
+  border-color: #86efac;
+  border-top-color: #22c55e;
+  color: #15803d;
+}
+
+.seat-available.seat-berth { border-left-color: #22c55e; border-top-color: #86efac; }
+
+.seat-available:hover:not(:disabled) {
+  background: #dcfce7;
+  border-color: #4ade80;
+  border-top-color: #16a34a;
+}
+.seat-available.seat-berth:hover:not(:disabled) {
+  border-left-color: #16a34a;
+  border-top-color: #4ade80;
+}
+
+.seat-selected {
+  background: rgba(225,29,72,0.10);
+  border-color: rgba(225,29,72,0.35);
+  border-top-color: #e11d48;
+  color: #be123c;
+  box-shadow: 0 4px 14px rgba(225,29,72,.18);
+}
+.seat-selected.seat-berth { border-left-color: #e11d48; border-top-color: rgba(225,29,72,0.35); }
+
+.seat-booked {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  border-top-color: #ef4444;
+  color: #b91c1c;
+  opacity: 0.75;
+}
+.seat-booked.seat-berth { border-left-color: #ef4444; border-top-color: #fca5a5; }
+
+.seat-reserved {
+  background: #fffbeb;
+  border-color: #fcd34d;
+  border-top-color: #f59e0b;
+  color: #92400e;
+  opacity: 0.80;
+}
+.seat-reserved.seat-berth { border-left-color: #f59e0b; border-top-color: #fcd34d; }
+
+/* ── Aisle (empty column) ─────────────────
+   The empty column occupies one 1fr slot in
+   the grid. Since it's transparent/empty and
+   the seat-to-seat gap is only 0.25rem, this
+   column creates a visually much larger gap —
+   acting as the bus aisle naturally.
+   ────────────────────────────────────────── */
+.seat-empty {
+  background: transparent;
+  border: none;
+  pointer-events: none;
+}
+
+/* Make the aisle column slightly narrower by
+   adding a center line hint */
+.seat-aisle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.seat-aisle::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 100%;
+  background: #e2e8f0;
+  border-radius: 1px;
+}

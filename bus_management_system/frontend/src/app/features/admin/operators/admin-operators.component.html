@@ -1,0 +1,79 @@
+<section class="operators-page">
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <div>
+      <h2 class="h4 fw-bold mb-1">Operator Management</h2>
+      <p class="text-secondary mb-0">Review and manage operator approvals.</p>
+    </div>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+  <div class="toolbar mb-3">
+    <ul class="nav nav-pills status-tabs flex-wrap gap-2">
+      <li class="nav-item" *ngFor="let option of filterOptions">
+        <button
+          class="nav-link"
+          type="button"
+          [class.active]="activeFilter === option"
+          (click)="setFilter(option)"
+        >
+          {{ option }}
+        </button>
+      </li>
+    </ul>
+
+    <div class="search-box">
+      <input
+        class="form-control"
+        type="search"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="applyFilters()"
+        placeholder="Search by company name"
+      />
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="alert alert-light border d-flex align-items-center gap-2 mb-3">
+    <div class="spinner-border spinner-border-sm text-danger" role="status" aria-label="Loading operators"></div>
+    <span>Loading operators...</span>
+  </div>
+
+  <div class="table-wrap table-responsive">
+    <table class="table align-middle mb-0">
+      <thead>
+        <tr>
+          <th>Company Name</th>
+          <th>License Number</th>
+          <th>Status</th>
+          <th>Date Applied</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let operator of filteredOperators" class="click-row" (click)="goToDetail(operator.id)">
+          <td class="fw-semibold">{{ operator.companyName }}</td>
+          <td>{{ operator.licenseNumber }}</td>
+          <td>
+            <span [class]="getStatusClass(operator.approvalStatus)">
+              {{ getStatusLabel(operator.approvalStatus) }}
+            </span>
+          </td>
+          <td>{{ operator.createdAt | date:'dd MMM, y' }}</td>
+          <td class="text-end">
+            <div class="d-inline-flex flex-wrap gap-1 justify-content-end" (click)="$event.stopPropagation()">
+              <button class="btn btn-sm btn-outline-success" type="button" (click)="approve(operator.id)">Approve</button>
+              <button class="btn btn-sm btn-outline-warning" type="button" (click)="reject(operator.id)">Reject</button>
+              <button class="btn btn-sm btn-outline-dark" type="button" (click)="block(operator.id)">Block</button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="!isLoading && filteredOperators.length === 0">
+          <td colspan="5" class="text-center py-4 text-secondary">No operators found for selected filter.</td>
+        </tr>
+        <tr *ngIf="isLoading && filteredOperators.length === 0">
+          <td colspan="5" class="text-center py-4 text-secondary">Loading operator list...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

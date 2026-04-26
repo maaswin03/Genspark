@@ -1,0 +1,215 @@
+:host {
+  display: block;
+}
+
+:host {
+  --auth-radius: 4px;
+}
+
+.auth-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(239, 68, 68, 0.15), transparent 36%),
+    radial-gradient(circle at 85% 85%, rgba(251, 113, 133, 0.2), transparent 34%),
+    linear-gradient(180deg, #fff5f5 0%, #fff 55%, #fff7f7 100%);
+}
+
+.auth-shell {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-card {
+  width: min(1040px, 100%);
+  margin: 0 auto;
+  border-radius: var(--auth-radius);
+  background: #fff;
+  border: 1px solid #f1f5f9;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+}
+
+.brand-panel {
+  background: linear-gradient(140deg, #c4122f 0%, #e11d48 44%, #fb7185 100%);
+  color: #fff;
+  padding: 1.5rem;
+  position: relative;
+  isolation: isolate;
+}
+
+.brand-panel::before {
+  content: '';
+  position: absolute;
+  inset: -30% 10% auto auto;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.13);
+  filter: blur(1px);
+  animation: drift 7s ease-in-out infinite;
+  z-index: -1;
+}
+
+.brand-content {
+  max-width: 320px;
+}
+
+.brand-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: var(--auth-radius);
+  padding: 0.35rem 0.8rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.brand-content h1 {
+  font-size: clamp(1.35rem, 1.2vw + 0.95rem, 1.85rem);
+  line-height: 1.15;
+  margin-bottom: 0.55rem;
+  font-weight: 700;
+  animation: reveal 700ms ease;
+}
+
+.brand-text {
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.form-panel {
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(180deg, #ffffff 0%, #fff7f7 100%);
+}
+
+.form-wrap {
+  width: 100%;
+  border: 1px solid #f3d6da;
+  border-radius: var(--auth-radius);
+  background: linear-gradient(180deg, #ffffff 0%, #fffdfd 100%);
+  padding: 1.25rem;
+  box-shadow: 0 16px 30px rgba(220, 38, 38, 0.08);
+}
+
+.form-header {
+  border-bottom: 1px solid #f7dadd;
+  padding-bottom: 0.8rem;
+}
+
+.form-kicker {
+  display: inline-flex;
+  border: 1px solid #f6c3cb;
+  background: #fff3f5;
+  border-radius: var(--auth-radius);
+  padding: 0.2rem 0.55rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #be123c;
+  font-weight: 700;
+}
+
+.form-wrap h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.form-wrap p {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.form-control,
+.input-group .btn {
+  border-radius: var(--auth-radius);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.form-control:focus {
+  border-color: #fb7185;
+  box-shadow: 0 0 0 0.2rem rgba(251, 113, 133, 0.18);
+}
+
+.invalid-note {
+  color: #dc2626;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-top: 0.35rem;
+}
+
+.auth-link {
+  color: #dc2626;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.secondary-actions {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.secondary-link {
+  border-radius: var(--auth-radius);
+  border: 1px solid #f4d5d9;
+  background: #fff;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.operator-register-link {
+  border-radius: var(--auth-radius);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+@keyframes drift {
+  0% {
+    transform: translateY(0px) translateX(0px);
+  }
+  50% {
+    transform: translateY(14px) translateX(-10px);
+  }
+  100% {
+    transform: translateY(0px) translateX(0px);
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+@media (max-width: 991px) {
+  .auth-card {
+    grid-template-columns: 1fr;
+  }
+
+  .brand-panel {
+    padding: 1.25rem;
+  }
+
+  .form-panel {
+    padding: 1rem;
+  }
+}
