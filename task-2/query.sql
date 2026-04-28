@@ -116,16 +116,15 @@ SELECT o.employeeid , e.lastname , e.firstname , e.title , COUNT(*) AS orders_ha
 INNER JOIN employees e ON o.employeeid = e.employeeid
 GROUP BY o.employeeid ,e.lastname , e.firstname , e.title HAVING COUNT(*) > 25;
 
-
 --Advanced
 
 --Find total sales amount per order
-SELECT o.orderid , o.orderdate , SUM(d.unitprice *  d.quantity) AS total_sales FROM order_details d 
+SELECT o.orderid , o.orderdate , SUM(d.unitprice *  d.quantity * (1 - d.discount))  AS total_sales FROM order_details d 
 INNER JOIN orders o ON o.orderid = d.orderid
 GROUP BY o.orderid;
 
 --Find total sales amount per customer.
-SELECT o.customerid , c.companyname , c.contactname , SUM(d.unitprice *  d.quantity) AS total_sales FROM order_details d 
+SELECT o.customerid , c.companyname , c.contactname , SUM(d.unitprice *  d.quantity * (1 - d.discount)) AS total_sales FROM order_details d 
 INNER JOIN orders o ON o.orderid = d.orderid
 INNER JOIN customers c ON o.customerid = c.customerid
 GROUP BY o.customerid ,  c.companyname , c.contactname;
@@ -136,28 +135,28 @@ INNER JOIN products p ON p.productid = o.productid
 GROUP BY o.productid , p.productname , p.unitprice ORDER BY SUM(o.quantity) DESC LIMIT 10;
 
 --Find categories whose total sales are greater than 50000
-SELECT c.categoryname ,  ROUND(SUM(o.unitprice * o.quantity),2) AS total_sales FROM order_details o 
+SELECT c.categoryname ,  SUM(o.unitprice * o.quantity * (1 - o.discount)) AS total_sales FROM order_details o 
 INNER JOIN products p ON p.productid = o.productid
 INNER JOIN categories c ON p.categoryid = c.categoryid
-GROUP BY c.categoryid HAVING SUM(o.unitprice * o.quantity) > 50000;
+GROUP BY c.categoryid , c.categoryname HAVING SUM(o.unitprice * o.quantity * (1 - o.discount)) > 50000;
 
 --Find employees whose total sales are greater than 100000
-SELECT e.employeeid , e.lastname , e.firstname , e.title , SUM(d.unitprice *  d.quantity) AS total_sales FROM order_details d 
+SELECT e.employeeid , e.lastname , e.firstname , e.title , SUM(d.unitprice *  d.quantity * (1 - d.discount)) AS total_sales FROM order_details d 
 INNER JOIN orders o ON o.orderid = d.orderid
 INNER JOIN employees e ON e.employeeid = o.employeeid
-GROUP BY e.employeeid  , e.lastname , e.firstname , e.title HAVING SUM(d.unitprice *  d.quantity) > 100000;
+GROUP BY e.employeeid  , e.lastname , e.firstname , e.title HAVING SUM(d.unitprice *  d.quantity * (1 - d.discount)) > 100000;
 
 --Find total sales per country based on customer country
-SELECT c.country , SUM(d.unitprice *  d.quantity) AS total_sales FROM customers c
+SELECT c.country , ROUND(SUM(d.unitprice *  d.quantity * (1 - d.discount))) AS total_sales FROM customers c
 INNER JOIN orders o ON o.customerid = c.customerid
 INNER JOIN order_details d ON d.orderid = o.orderid
 GROUP BY c.country;
 
 --Find suppliers whose products generated sales above 30000
-SELECT s.supplierid , s.companyname , ROUND(SUM(d.unitprice *  d.quantity),2) AS total_sales FROM suppliers s
+SELECT s.supplierid , s.companyname , SUM(d.unitprice *  d.quantity * (1 - d.discount)) AS total_sales FROM suppliers s
 INNER JOIN products p ON s.supplierid = p.supplierid
 INNER JOIN order_details d ON d.productid = p.productid
-GROUP BY s.supplierid , s.companyname HAVING SUM(d.unitprice *  d.quantity) > 30000;
+GROUP BY s.supplierid , s.companyname HAVING SUM(d.unitprice *  d.quantity * (1 - d.discount)) > 30000;
 
 --Find customers who placed more than 10 orders and sort by order count descending
 SELECT o.customerid , c.companyname , c.contactname , COUNT(o.customerid) AS total_orders FROM orders o 
@@ -171,7 +170,7 @@ GROUP BY date_part('year',orderdate) , date_part('month',orderdate)
 ORDER BY year , month;
 
 --Find monthly sales amount ordered by year and month
-SELECT date_part('year',o.orderdate) AS year , date_part('month',o.orderdate) AS month , ROUND(SUM(d.unitprice * d.quantity),2) AS total_sales FROM orders o
+SELECT date_part('year',o.orderdate) AS year , date_part('month',o.orderdate) AS month , ROUND(SUM(d.unitprice * d.quantity * (1 - d.discount))) AS total_sales FROM orders o
 INNER JOIN order_details d ON o.orderid = d.orderid
 GROUP BY date_part('year',o.orderdate) , date_part('month',o.orderdate)
 ORDER BY year , month;
