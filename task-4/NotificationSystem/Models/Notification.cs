@@ -40,7 +40,7 @@ namespace NotificationSystem.Models
 
         public override string ToString()
         {
-            return $"{MessageId} - {Message} - {SendedAt} - {ReceiverId} - {NotificationType}";
+            return $"{MessageId} - {Message} - {SendedAt} - {NotificationType}";
         }
     }
 }

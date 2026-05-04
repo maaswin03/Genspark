@@ -44,6 +44,7 @@ namespace NotificationSystem.Services
         //method to fetch user details based on email
         public int GetUserDetailsByEmail(string Email)
         {
+
             User? user = null;
             foreach (var item in UserStack)
             {
@@ -79,11 +80,13 @@ namespace NotificationSystem.Services
             }
             if (user != null)
             {
+
                 PrintDetails(user); // calling the method for printing details
                 return user.UserId;
             }
             else
             {
+
                 Console.WriteLine("NO ACCOUNT WITH THE GIVEN USER ID IS PRESENT. PLEASE ENTER VALID USER ID");
                 return 0;
             }
@@ -110,6 +113,9 @@ namespace NotificationSystem.Services
         //method for validating the user input
         public bool ValidateUser(User user)
         {
+            var UserWithEmail = UserStack.FindAll(x => x.Email == user.Email);
+
+            var UserWithPhone = UserStack.FindAll(x => x.PhoneNumber == user.PhoneNumber);
             //checking the phone number has 10 digits
             if (user.PhoneNumber.Length != 10)
             {
@@ -120,6 +126,16 @@ namespace NotificationSystem.Services
             else if (!user.Email.Contains("@") || !user.Email.Contains("."))
             {
                 Console.WriteLine("PLEASE ENTER A VALID EMAIL");
+                return false;
+            }
+            else if (UserWithEmail.Count > 0)
+            {
+                Console.WriteLine("USER WITH THE SAME EMAIL ALREADY PRESENT");
+                return false;
+            }
+            else if (UserWithPhone.Count > 0)
+            {
+                Console.WriteLine("USER WITH THE SAME PHONE NUMBER ALREADY PRESENT");
                 return false;
             }
             return true; // return true if all things get satisfied

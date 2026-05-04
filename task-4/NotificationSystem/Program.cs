@@ -12,7 +12,7 @@ namespace NotificationSystem
         {
             IUserService User = new UserService(); // object fot user service
 
-            INotificationService Notification = new NotificationService(); // object for notification service
+            INotificationService Notification = new NotificationService(User); // object for notification service
 
             //loop for continuously running the app
             while (true)
@@ -35,15 +35,16 @@ namespace NotificationSystem
                 //used for getting option for the user
                 Console.WriteLine("ENTER THE VALUE : ");
                 int n = 0;
-                while (!int.TryParse(Console.ReadLine(), out n) && n > 0 && n <= 9)
+                while (!int.TryParse(Console.ReadLine(), out n) || n < 1 || n > 9)
                 {
                     Console.WriteLine($"ENTER A VALID VALUE");
                 }
 
                 if (n == 1) //creating new user
                 {
+
                     //getting users name as input
-                    Console.WriteLine("ENTER YOUT NAME : ");
+                    Console.WriteLine("\nENTER YOUT NAME : ");
                     string Name = Console.ReadLine() ?? "";
 
                     //getting email as input
@@ -62,7 +63,7 @@ namespace NotificationSystem
                 else if (n == 2) //deleting the user
                 {
                     //getting user id from user for deleting
-                    Console.WriteLine("ENTER USER ID FOR DELETING : ");
+                    Console.WriteLine("\nENTER USER ID FOR DELETING : ");
                     int id;
                     while (!int.TryParse(Console.ReadLine(), out id))
                     {
@@ -75,7 +76,7 @@ namespace NotificationSystem
                 else if (n == 3) //fetching details based on email
                 {
                     //getting email input from user for fetching user details
-                    Console.WriteLine("ENTER YOUR EMAIL FOR FETCHING DETAILS : ");
+                    Console.WriteLine("\nENTER YOUR EMAIL FOR FETCHING DETAILS : ");
                     string Email = Console.ReadLine() ?? "";
 
                     User.GetUserDetailsByEmail(Email); //calling the method
@@ -83,19 +84,20 @@ namespace NotificationSystem
                 else if (n == 4) //fetching details based on phone number
                 {
                     //getting phone number input from user for fetching details
-                    Console.WriteLine("ENTER YOUR PHONE NUMBER : ");
+                    Console.WriteLine("\nENTER YOUR PHONE NUMBER : ");
                     string PhoneNumber = Console.ReadLine() ?? "";
 
                     User.GetUserDetailsByPhone(PhoneNumber); //calling the fetch method
                 }
                 else if (n == 5) //fetching all the user details
                 {
+                    Console.WriteLine();
                     User.GetAllUserDetails(); //calling the user details method for showing all user details
                 }
                 else if (n == 6) //method for sending message
                 {
                     //getting message input from user
-                    Console.WriteLine("ENTER THE MESSAGE FOR SENDING : ");
+                    Console.WriteLine("\nENTER THE MESSAGE FOR SENDING : ");
                     string Message = Console.ReadLine() ?? "";
 
                     //showing all the available modes
@@ -106,7 +108,7 @@ namespace NotificationSystem
                     //getting input for the desired mode
                     Console.WriteLine("ENTER THE VALUE : ");
                     int value = 0;
-                    while (!int.TryParse(Console.ReadLine(), out value) && value == 1 || value == 2)
+                    while (!int.TryParse(Console.ReadLine(), out value) || (value != 1 && value != 2))
                     {
                         Console.WriteLine("PLEASE ENTER A VALID NUMBER FOR MODE OF COMMUNICATION");
                     }
@@ -117,7 +119,7 @@ namespace NotificationSystem
                 else if (n == 7) //method for unsending message
                 {
                     //getting message id from the user
-                    Console.WriteLine("ENTER MESSAGE ID FOR UNSENDING : ");
+                    Console.WriteLine("\nENTER MESSAGE ID FOR UNSENDING : ");
                     int id;
                     while (!int.TryParse(Console.ReadLine(), out id))
                     {
@@ -128,6 +130,7 @@ namespace NotificationSystem
                 }
                 else if (n == 8) //fetching all messages
                 {
+                    Console.WriteLine();
                     Notification.ShowAllMessages(); //calling the method to show all the sent message
                 }
                 else if (n == 9) //exit the loop

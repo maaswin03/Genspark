@@ -9,18 +9,17 @@ namespace NotificationSystem.Services
 
         public int LastMessageid = 0;
 
-        IUserService User = new UserService(); //object for user services class
+        private IUserService User;
 
-
+        public NotificationService(IUserService user)
+        {
+            User = user;
+        }
 
         //method for sending a new message
         public void SendNotification(string message, int value)
         {
-            Notification notification = new Notification(message);
-            LastMessageid++;
-            notification.MessageId = LastMessageid; //creating a unique user id
-            notification.NotificationSent = true;//setting status as true
-            notification.SendedAt = DateTime.Now;
+            Notification? notification = null;
 
             if (value == 1)
             {
@@ -40,14 +39,26 @@ namespace NotificationSystem.Services
                 notification.ReceiverId = id;
             }
 
+            if (notification == null)
+            {
+                Console.WriteLine("INVALID NOTIFICATION TYPE SELECTED");
+                return;
+            }
+
+            notification.Message = message;
+            LastMessageid++;
+            notification.MessageId = LastMessageid; //creating a unique user id
+            notification.NotificationSent = true;//setting status as true
+            notification.SendedAt = DateTime.Now;
+
             if (notification.ReceiverId > 0) // validating user id not equal to 0
             {
                 NotificationStack.Add(notification); // adding to the list
-                Console.WriteLine("EMAIL SENT SUCCESSFULLY TO THE USER");
+                ((INotification)notification).Send();
             }
             else
             {
-                Console.WriteLine("EMAIL SENT FAILED DUE TO TECHNICAL ISSUE");
+                Console.WriteLine("NOTIFICATION FAILED DUE TO TECHNICAL ISSUE");
             }
         }
 
