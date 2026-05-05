@@ -39,7 +39,7 @@ namespace NotificationSystem
         {
             Console.WriteLine("PLEASE ENTER USER ID FOR DELETION : ");
             int id = 0;
-            while (!int.TryParse(Console.ReadLine(), out id) && (id < 0)) //getting user id as input 
+            while (!int.TryParse(Console.ReadLine(), out id) || (id < 0)) //getting user id as input 
             {
                 Console.WriteLine("PLEASE ENTER A VALID USER ID");
             }
@@ -61,7 +61,7 @@ namespace NotificationSystem
         {
             Console.WriteLine("PLEASE ENTER USER ID FOR FETCHING : ");
             int id = 0;
-            while (!int.TryParse(Console.ReadLine(), out id) && (id < 0)) //getting user id from user
+            while (!int.TryParse(Console.ReadLine(), out id) || (id < 0)) //getting user id from user
             {
                 Console.WriteLine("PLEASE ENTER A VALID USER ID");
             }
@@ -104,7 +104,7 @@ namespace NotificationSystem
         {
             Console.WriteLine("PLEASE ENTER USER ID FOR UPDATING : ");
             int id = 0;
-            while (!int.TryParse(Console.ReadLine(), out id) && (id < 0)) //getting user id 
+            while (!int.TryParse(Console.ReadLine(), out id) || (id < 0)) //getting user id 
             {
                 Console.WriteLine("PLEASE ENTER A VALID USER ID");
             }
@@ -151,7 +151,7 @@ namespace NotificationSystem
 
             Console.WriteLine("PLEASE ENTER USER ID FOR SENDING: ");
             int id = 0;
-            while (!int.TryParse(Console.ReadLine(), out id) && (id < 0)) //getting user id 
+            while (!int.TryParse(Console.ReadLine(), out id) || (id < 0)) //getting user id 
             {
                 Console.WriteLine("PLEASE ENTER A VALID USER ID");
             }
@@ -175,7 +175,7 @@ namespace NotificationSystem
         {
             Console.WriteLine("PLEASE ENTER MESSAGE ID FOR UNSENDING : ");
             int id = 0;
-            while (!int.TryParse(Console.ReadLine(), out id) && (id < 0)) //getting message id as input 
+            while (!int.TryParse(Console.ReadLine(), out id) || (id < 0)) //getting message id as input 
             {
                 Console.WriteLine("PLEASE ENTER A VALID MESSAGE ID");
             }
@@ -197,7 +197,7 @@ namespace NotificationSystem
         {
             Console.WriteLine("PLEASE ENTER MESSAGE ID FOR FETCHING : ");
             int id = 0;
-            while (!int.TryParse(Console.ReadLine(), out id) && (id < 0)) //getting message id from user
+            while (!int.TryParse(Console.ReadLine(), out id) || (id < 0)) //getting message id from user
             {
                 Console.WriteLine("PLEASE ENTER A VALID MESSAGE ID");
             }
