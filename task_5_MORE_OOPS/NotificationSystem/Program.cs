@@ -259,7 +259,7 @@ namespace NotificationSystem
 
                 Console.WriteLine("PLEASE ENTER THE VALUE : ");
                 int n = 0;
-                while (!int.TryParse(Console.ReadLine(), out n) && (n < 0 || n > 9))
+                while (!int.TryParse(Console.ReadLine(), out n) || (n < 0 || n > 9))
                 {
                     Console.WriteLine("PLEASE ENTER A VALID NUMBER");
                 }
