@@ -1,6 +1,6 @@
 namespace NotificationSystem.Models
 {
-    class User
+    class User : IComparable<User>
     {
         //variable for storing user id
         public int UserId { get; set; }
@@ -34,6 +34,11 @@ namespace NotificationSystem.Models
         public override string ToString()
         {
             return $"{UserId} - {Name} - {Email} - {PhoneNumber}";
+        }
+
+        public int CompareTo(User? other)
+        {
+            return this.UserId.CompareTo(other.UserId);
         }
     }
 }
