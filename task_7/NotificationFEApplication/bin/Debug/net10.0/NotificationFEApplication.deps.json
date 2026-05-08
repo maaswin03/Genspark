@@ -1,0 +1,73 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "NotificationFEApplication/1.0.0": {
+        "dependencies": {
+          "NotificationBLLibrary": "1.0.0",
+          "NotificationModelLibrary": "1.0.0"
+        },
+        "runtime": {
+          "NotificationFEApplication.dll": {}
+        }
+      },
+      "NotificationBLLibrary/1.0.0": {
+        "dependencies": {
+          "NotificationDALLibrary": "1.0.0",
+          "NotificationModelLibrary": "1.0.0"
+        },
+        "runtime": {
+          "NotificationBLLibrary.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "NotificationDALLibrary/1.0.0": {
+        "dependencies": {
+          "NotificationModelLibrary": "1.0.0"
+        },
+        "runtime": {
+          "NotificationDALLibrary.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "NotificationModelLibrary/1.0.0": {
+        "runtime": {
+          "NotificationModelLibrary.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "NotificationFEApplication/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "NotificationBLLibrary/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "NotificationDALLibrary/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "NotificationModelLibrary/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

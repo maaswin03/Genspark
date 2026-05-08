@@ -1,0 +1,15 @@
+/Users/aswin/Documents/vscode/task_7/NotificationDALLibrary/obj/Debug/net10.0/NotificationDALLibrary.csproj.AssemblyReference.cache
+/Users/aswin/Documents/vscode/task_7/NotificationDALLibrary/obj/Debug/net10.0/NotificationDALLibrary.GeneratedMSBuildEditorConfig.editorconfig
+/Users/aswin/Documents/vscode/task_7/NotificationDALLibrary/obj/Debug/net10.0/NotificationDALLibrary.AssemblyInfoInputs.cache
+/Users/aswin/Documents/vscode/task_7/NotificationDALLibrary/obj/Debug/net10.0/NotificationDALLibrary.AssemblyInfo.cs
+/Users/aswin/Documents/vscode/task_7/NotificationDALLibrary/obj/Debug/net10.0/NotificationDALLibrary.csproj.CoreCompileInputs.cache
+/Users/aswin/Documents/vscode/task_7/NotificationDALLibrary/bin/Debug/net10.0/NotificationDALLibrary.deps.json
+/Users/aswin/Documents/vscode/task_7/NotificationDALLibrary/bin/Debug/net10.0/NotificationDALLibrary.dll
+/Users/aswin/Documents/vscode/task_7/NotificationDALLibrary/bin/Debug/net10.0/NotificationDALLibrary.pdb
+/Users/aswin/Documents/vscode/task_7/NotificationDALLibrary/bin/Debug/net10.0/NotificationModelLibrary.dll
+/Users/aswin/Documents/vscode/task_7/NotificationDALLibrary/bin/Debug/net10.0/NotificationModelLibrary.pdb
+/Users/aswin/Documents/vscode/task_7/NotificationDALLibrary/obj/Debug/net10.0/Notifica.69973E61.Up2Date
+/Users/aswin/Documents/vscode/task_7/NotificationDALLibrary/obj/Debug/net10.0/NotificationDALLibrary.dll
+/Users/aswin/Documents/vscode/task_7/NotificationDALLibrary/obj/Debug/net10.0/refint/NotificationDALLibrary.dll
+/Users/aswin/Documents/vscode/task_7/NotificationDALLibrary/obj/Debug/net10.0/NotificationDALLibrary.pdb
+/Users/aswin/Documents/vscode/task_7/NotificationDALLibrary/obj/Debug/net10.0/ref/NotificationDALLibrary.dll
