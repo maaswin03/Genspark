@@ -1,0 +1,17 @@
+/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingBLLibrary/bin/Debug/net10.0/WordGuessingBLLibrary.deps.json
+/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingBLLibrary/bin/Debug/net10.0/WordGuessingBLLibrary.dll
+/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingBLLibrary/bin/Debug/net10.0/WordGuessingBLLibrary.pdb
+/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingBLLibrary/bin/Debug/net10.0/WordGuessingDALLibrary.dll
+/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingBLLibrary/bin/Debug/net10.0/WordGuessingModelLibrary.dll
+/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingBLLibrary/bin/Debug/net10.0/WordGuessingModelLibrary.pdb
+/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingBLLibrary/bin/Debug/net10.0/WordGuessingDALLibrary.pdb
+/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingBLLibrary/obj/Debug/net10.0/WordGuessingBLLibrary.csproj.AssemblyReference.cache
+/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingBLLibrary/obj/Debug/net10.0/WordGuessingBLLibrary.GeneratedMSBuildEditorConfig.editorconfig
+/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingBLLibrary/obj/Debug/net10.0/WordGuessingBLLibrary.AssemblyInfoInputs.cache
+/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingBLLibrary/obj/Debug/net10.0/WordGuessingBLLibrary.AssemblyInfo.cs
+/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingBLLibrary/obj/Debug/net10.0/WordGuessingBLLibrary.csproj.CoreCompileInputs.cache
+/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingBLLibrary/obj/Debug/net10.0/WordGues.7CA59B20.Up2Date
+/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingBLLibrary/obj/Debug/net10.0/WordGuessingBLLibrary.dll
+/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingBLLibrary/obj/Debug/net10.0/refint/WordGuessingBLLibrary.dll
+/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingBLLibrary/obj/Debug/net10.0/WordGuessingBLLibrary.pdb
+/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingBLLibrary/obj/Debug/net10.0/ref/WordGuessingBLLibrary.dll

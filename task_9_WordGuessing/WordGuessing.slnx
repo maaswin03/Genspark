@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="WordGuessingBLLibrary/WordGuessingBLLibrary.csproj" />
+  <Project Path="WordGuessingDALLibrary/WordGuessingDALLibrary.csproj" />
+  <Project Path="WordGuessingFEApplication/WordGuessingFEApplication.csproj" />
+  <Project Path="WordGuessingModelLibrary/WordGuessingModelLibrary.csproj" />
+</Solution>
