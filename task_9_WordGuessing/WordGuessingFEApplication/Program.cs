@@ -61,8 +61,6 @@ namespace WordGuessingFEApplication
                         Console.WriteLine();
                         Console.WriteLine("-------------------------------------------------------");
                         Console.ResetColor();
-
-                        game.CreateResult(UserName, 6, "FAILED TO GUESS", 0);
                     }
                 }
                 catch (InvalidInputException ex)
@@ -82,6 +80,7 @@ namespace WordGuessingFEApplication
                 Console.WriteLine("YOU HAVE USED ALL 6 ATTEMPTS");
                 Console.WriteLine("YOUR SCORE : 0");
                 Console.ResetColor();
+                game.CreateResult(UserName, 6, "FAILED TO GUESS", 0);
             }
         }
 
