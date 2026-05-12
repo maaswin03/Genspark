@@ -52,7 +52,7 @@ namespace WordGuessingDALLibrary.Repository
             List<Leader> resultlist = new List<Leader>();
 
             //query for inserting value
-            string SelectQuery = $"SELECT username , COUNT(*) AS total_games , SUM(score) AS total_score , MAX(score) AS best_score FROM results GROUP BY username ORDER BY total_score DESC";
+            string SelectQuery = $"SELECT username , COUNT(*) AS total_games , SUM(score) AS total_score , MAX(score) AS best_score FROM results GROUP BY username ORDER BY total_score DESC LIMIT 10";
             NpgsqlCommand command = new NpgsqlCommand(SelectQuery, connection);
 
             try
@@ -94,7 +94,7 @@ namespace WordGuessingDALLibrary.Repository
             List<Results> resultlist = new List<Results>();
 
             //query for inserting value
-            string SelectQuery = $"SELECT * FROM results Where username='{username}' ORDER BY played_at DESC";
+            string SelectQuery = $"SELECT * FROM results Where username='{username}' ORDER BY played_at DESC LIMIT 10";
             NpgsqlCommand command = new NpgsqlCommand(SelectQuery, connection);
 
             try
