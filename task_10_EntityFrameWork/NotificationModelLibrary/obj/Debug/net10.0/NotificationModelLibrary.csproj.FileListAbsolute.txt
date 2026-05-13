@@ -1,0 +1,11 @@
+/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationModelLibrary/bin/Debug/net10.0/NotificationModelLibrary.deps.json
+/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationModelLibrary/bin/Debug/net10.0/NotificationModelLibrary.dll
+/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationModelLibrary/bin/Debug/net10.0/NotificationModelLibrary.pdb
+/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationModelLibrary/obj/Debug/net10.0/NotificationModelLibrary.GeneratedMSBuildEditorConfig.editorconfig
+/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationModelLibrary/obj/Debug/net10.0/NotificationModelLibrary.AssemblyInfoInputs.cache
+/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationModelLibrary/obj/Debug/net10.0/NotificationModelLibrary.AssemblyInfo.cs
+/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationModelLibrary/obj/Debug/net10.0/NotificationModelLibrary.csproj.CoreCompileInputs.cache
+/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationModelLibrary/obj/Debug/net10.0/NotificationModelLibrary.dll
+/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationModelLibrary/obj/Debug/net10.0/refint/NotificationModelLibrary.dll
+/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationModelLibrary/obj/Debug/net10.0/NotificationModelLibrary.pdb
+/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationModelLibrary/obj/Debug/net10.0/ref/NotificationModelLibrary.dll
