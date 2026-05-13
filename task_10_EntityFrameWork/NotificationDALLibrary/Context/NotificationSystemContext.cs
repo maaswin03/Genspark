@@ -20,6 +20,10 @@ namespace NotificationDALLibrary.Context
             {
                 u.HasKey(u => u.UserId); //setting userid as primary key
 
+                u.HasIndex(u => u.Email).IsUnique(); //email should be Unique
+
+                u.HasIndex(u => u.PhoneNumber).IsUnique(); //PhoneNumber should be Unique
+
                 u.Property(u => u.CreatedAt).HasColumnType("timestamp without time zone"); //fixing timezone issue
             });
 

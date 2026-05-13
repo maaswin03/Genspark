@@ -29,8 +29,6 @@ namespace NotificationModelLibrary
         //variable for storing receiver userId
         public int? ReceiverId { get; set; }
 
-        public string UserName { get; set; } = string.Empty;
-
         public User? User { get; set; } = null;
 
         public Notification()

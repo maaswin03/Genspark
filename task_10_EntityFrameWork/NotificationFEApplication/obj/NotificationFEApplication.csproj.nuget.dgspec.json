@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationFEApplication/NotificationFEApplication.csproj": {}
+    "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationFEApplication/NotificationFEApplication.csproj": {}
   },
   "projects": {
-    "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationBLLibrary/NotificationBLLibrary.csproj": {
+    "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationBLLibrary/NotificationBLLibrary.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationBLLibrary/NotificationBLLibrary.csproj",
+        "projectUniqueName": "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationBLLibrary/NotificationBLLibrary.csproj",
         "projectName": "NotificationBLLibrary",
-        "projectPath": "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationBLLibrary/NotificationBLLibrary.csproj",
+        "projectPath": "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationBLLibrary/NotificationBLLibrary.csproj",
         "packagesPath": "/Users/aswin/.nuget/packages/",
-        "outputPath": "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationBLLibrary/obj/",
+        "outputPath": "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationBLLibrary/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/aswin/.nuget/NuGet/NuGet.Config"
@@ -26,11 +26,11 @@
           "net10.0": {
             "targetAlias": "net10.0",
             "projectReferences": {
-              "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationDALLibrary/NotificationDALLibrary.csproj": {
-                "projectPath": "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationDALLibrary/NotificationDALLibrary.csproj"
+              "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationDALLibrary/NotificationDALLibrary.csproj": {
+                "projectPath": "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationDALLibrary/NotificationDALLibrary.csproj"
               },
-              "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationModelLibrary/NotificationModelLibrary.csproj": {
-                "projectPath": "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationModelLibrary/NotificationModelLibrary.csproj"
+              "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationModelLibrary/NotificationModelLibrary.csproj": {
+                "projectPath": "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationModelLibrary/NotificationModelLibrary.csproj"
               }
             }
           }
@@ -350,14 +350,14 @@
         }
       }
     },
-    "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationDALLibrary/NotificationDALLibrary.csproj": {
+    "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationDALLibrary/NotificationDALLibrary.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationDALLibrary/NotificationDALLibrary.csproj",
+        "projectUniqueName": "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationDALLibrary/NotificationDALLibrary.csproj",
         "projectName": "NotificationDALLibrary",
-        "projectPath": "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationDALLibrary/NotificationDALLibrary.csproj",
+        "projectPath": "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationDALLibrary/NotificationDALLibrary.csproj",
         "packagesPath": "/Users/aswin/.nuget/packages/",
-        "outputPath": "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationDALLibrary/obj/",
+        "outputPath": "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationDALLibrary/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/aswin/.nuget/NuGet/NuGet.Config"
@@ -372,8 +372,8 @@
           "net10.0": {
             "targetAlias": "net10.0",
             "projectReferences": {
-              "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationModelLibrary/NotificationModelLibrary.csproj": {
-                "projectPath": "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationModelLibrary/NotificationModelLibrary.csproj"
+              "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationModelLibrary/NotificationModelLibrary.csproj": {
+                "projectPath": "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationModelLibrary/NotificationModelLibrary.csproj"
               }
             }
           }
@@ -721,14 +721,14 @@
         }
       }
     },
-    "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationFEApplication/NotificationFEApplication.csproj": {
+    "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationFEApplication/NotificationFEApplication.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationFEApplication/NotificationFEApplication.csproj",
+        "projectUniqueName": "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationFEApplication/NotificationFEApplication.csproj",
         "projectName": "NotificationFEApplication",
-        "projectPath": "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationFEApplication/NotificationFEApplication.csproj",
+        "projectPath": "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationFEApplication/NotificationFEApplication.csproj",
         "packagesPath": "/Users/aswin/.nuget/packages/",
-        "outputPath": "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationFEApplication/obj/",
+        "outputPath": "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationFEApplication/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/aswin/.nuget/NuGet/NuGet.Config"
@@ -743,11 +743,11 @@
           "net10.0": {
             "targetAlias": "net10.0",
             "projectReferences": {
-              "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationBLLibrary/NotificationBLLibrary.csproj": {
-                "projectPath": "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationBLLibrary/NotificationBLLibrary.csproj"
+              "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationBLLibrary/NotificationBLLibrary.csproj": {
+                "projectPath": "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationBLLibrary/NotificationBLLibrary.csproj"
               },
-              "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationModelLibrary/NotificationModelLibrary.csproj": {
-                "projectPath": "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationModelLibrary/NotificationModelLibrary.csproj"
+              "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationModelLibrary/NotificationModelLibrary.csproj": {
+                "projectPath": "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationModelLibrary/NotificationModelLibrary.csproj"
               }
             }
           }
@@ -1067,14 +1067,14 @@
         }
       }
     },
-    "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationModelLibrary/NotificationModelLibrary.csproj": {
+    "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationModelLibrary/NotificationModelLibrary.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationModelLibrary/NotificationModelLibrary.csproj",
+        "projectUniqueName": "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationModelLibrary/NotificationModelLibrary.csproj",
         "projectName": "NotificationModelLibrary",
-        "projectPath": "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationModelLibrary/NotificationModelLibrary.csproj",
+        "projectPath": "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationModelLibrary/NotificationModelLibrary.csproj",
         "packagesPath": "/Users/aswin/.nuget/packages/",
-        "outputPath": "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationModelLibrary/obj/",
+        "outputPath": "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationModelLibrary/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/aswin/.nuget/NuGet/NuGet.Config"

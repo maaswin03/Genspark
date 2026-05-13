@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationModelLibrary/NotificationModelLibrary.csproj",
+      "projectUniqueName": "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationModelLibrary/NotificationModelLibrary.csproj",
       "projectName": "NotificationModelLibrary",
-      "projectPath": "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationModelLibrary/NotificationModelLibrary.csproj",
+      "projectPath": "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationModelLibrary/NotificationModelLibrary.csproj",
       "packagesPath": "/Users/aswin/.nuget/packages/",
-      "outputPath": "/Users/aswin/Documents/vscode/task_10_EntityFrameWork/NotificationModelLibrary/obj/",
+      "outputPath": "/Users/aswin/Documents/vscode/Genspark/task_10_EntityFrameWork/NotificationModelLibrary/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/aswin/.nuget/NuGet/NuGet.Config"
