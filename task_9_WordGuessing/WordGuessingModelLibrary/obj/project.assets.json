@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingModelLibrary/WordGuessingModelLibrary.csproj",
+      "projectUniqueName": "/Users/aswin/Documents/vscode/Genspark/task_9_WordGuessing/WordGuessingModelLibrary/WordGuessingModelLibrary.csproj",
       "projectName": "WordGuessingModelLibrary",
-      "projectPath": "/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingModelLibrary/WordGuessingModelLibrary.csproj",
+      "projectPath": "/Users/aswin/Documents/vscode/Genspark/task_9_WordGuessing/WordGuessingModelLibrary/WordGuessingModelLibrary.csproj",
       "packagesPath": "/Users/aswin/.nuget/packages/",
-      "outputPath": "/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingModelLibrary/obj/",
+      "outputPath": "/Users/aswin/Documents/vscode/Genspark/task_9_WordGuessing/WordGuessingModelLibrary/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/aswin/.nuget/NuGet/NuGet.Config"

@@ -23,8 +23,12 @@ namespace WordGuessingDALLibrary.Repository
         public bool Create(Users user)
         {
             //query for inserting into the table
-            string InsertQuery = $"INSERT INTO users(username , password , createdat) VALUES('{user.UserName}','{user.Password}','{user.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")}')";
+            string InsertQuery = "INSERT INTO users(username , password , createdat) VALUES(@username,@password,@createdat)";
             NpgsqlCommand command = new NpgsqlCommand(InsertQuery, connection);
+
+            command.Parameters.AddWithValue("@username", user.UserName);
+            command.Parameters.AddWithValue("@password", user.Password);
+            command.Parameters.AddWithValue("@createdat", user.CreatedAt);
 
             try
             {
@@ -54,8 +58,11 @@ namespace WordGuessingDALLibrary.Repository
         public bool GetData(Users user)
         {
             //query to execute select operation
-            string SelectQuery = $"SELECT * FROM users WHERE username='{user.UserName}' AND password='{user.Password}'";
+            string SelectQuery = "SELECT * FROM users WHERE username=@username AND password=@password";
             NpgsqlCommand command = new NpgsqlCommand(SelectQuery, connection);
+
+            command.Parameters.AddWithValue("@username", user.UserName);
+            command.Parameters.AddWithValue("@password", user.Password);
 
             try
             {
@@ -83,8 +90,10 @@ namespace WordGuessingDALLibrary.Repository
         public bool CheckUser(string username)
         {
             //query to execute select operation
-            string SelectQuery = $"SELECT * FROM users WHERE username='{username}'";
+            string SelectQuery = "SELECT * FROM users WHERE username=@username";
             NpgsqlCommand command = new NpgsqlCommand(SelectQuery, connection);
+
+            command.Parameters.AddWithValue("@username", username);
 
             try
             {

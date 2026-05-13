@@ -22,8 +22,14 @@ namespace WordGuessingDALLibrary.Repository
         public Results? Create(Results result)
         {
             //query for inserting value
-            string InsertQuery = $"INSERT INTO results(username,total_attempt,word , score , played_at) VALUES('{result.UserName}' , '{result.Attempt}' ,  '{result.Word}' , '{result.Score}' , '{result.PlayedAt.ToString("yyyy-MM-dd HH:mm:ss")}')";
+            string InsertQuery = "INSERT INTO results(username,total_attempt,word , score , played_at) VALUES(@username , @attempt , @word , @score , @playedat)";
             NpgsqlCommand command = new NpgsqlCommand(InsertQuery, connection);
+
+            command.Parameters.AddWithValue("@username", result.UserName);
+            command.Parameters.AddWithValue("@attempt", result.Attempt);
+            command.Parameters.AddWithValue("@word", result.Word);
+            command.Parameters.AddWithValue("@score", result.Score);
+            command.Parameters.AddWithValue("@playedat", result.PlayedAt);
 
             try
             {
@@ -52,7 +58,7 @@ namespace WordGuessingDALLibrary.Repository
             List<Leader> resultlist = new List<Leader>();
 
             //query for inserting value
-            string SelectQuery = $"SELECT username , COUNT(*) AS total_games , SUM(score) AS total_score , MAX(score) AS best_score FROM results GROUP BY username ORDER BY total_score DESC LIMIT 10";
+            string SelectQuery = "SELECT username , COUNT(*) AS total_games , SUM(score) AS total_score , MAX(score) AS best_score FROM results GROUP BY username ORDER BY total_score DESC LIMIT 10";
             NpgsqlCommand command = new NpgsqlCommand(SelectQuery, connection);
 
             try
@@ -94,8 +100,10 @@ namespace WordGuessingDALLibrary.Repository
             List<Results> resultlist = new List<Results>();
 
             //query for inserting value
-            string SelectQuery = $"SELECT * FROM results Where username='{username}' ORDER BY played_at DESC LIMIT 10";
+            string SelectQuery = "SELECT * FROM results Where username=@username ORDER BY played_at DESC LIMIT 10";
             NpgsqlCommand command = new NpgsqlCommand(SelectQuery, connection);
+
+            command.Parameters.AddWithValue("@username", username);
 
             try
             {

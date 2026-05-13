@@ -9,3 +9,15 @@
 /Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingModelLibrary/obj/Debug/net10.0/refint/WordGuessingModelLibrary.dll
 /Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingModelLibrary/obj/Debug/net10.0/WordGuessingModelLibrary.pdb
 /Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingModelLibrary/obj/Debug/net10.0/ref/WordGuessingModelLibrary.dll
+/Users/aswin/Documents/vscode/Genspark/task_9_WordGuessing/WordGuessingModelLibrary/bin/Debug/net10.0/WordGuessingModelLibrary.deps.json
+/Users/aswin/Documents/vscode/Genspark/task_9_WordGuessing/WordGuessingModelLibrary/bin/Debug/net10.0/WordGuessingModelLibrary.dll
+/Users/aswin/Documents/vscode/Genspark/task_9_WordGuessing/WordGuessingModelLibrary/bin/Debug/net10.0/WordGuessingModelLibrary.pdb
+/Users/aswin/Documents/vscode/Genspark/task_9_WordGuessing/WordGuessingModelLibrary/obj/Debug/net10.0/WordGuessingModelLibrary.GeneratedMSBuildEditorConfig.editorconfig
+/Users/aswin/Documents/vscode/Genspark/task_9_WordGuessing/WordGuessingModelLibrary/obj/Debug/net10.0/WordGuessingModelLibrary.AssemblyInfoInputs.cache
+/Users/aswin/Documents/vscode/Genspark/task_9_WordGuessing/WordGuessingModelLibrary/obj/Debug/net10.0/WordGuessingModelLibrary.AssemblyInfo.cs
+/Users/aswin/Documents/vscode/Genspark/task_9_WordGuessing/WordGuessingModelLibrary/obj/Debug/net10.0/WordGuessingModelLibrary.csproj.CoreCompileInputs.cache
+/Users/aswin/Documents/vscode/Genspark/task_9_WordGuessing/WordGuessingModelLibrary/obj/Debug/net10.0/WordGuessingModelLibrary.sourcelink.json
+/Users/aswin/Documents/vscode/Genspark/task_9_WordGuessing/WordGuessingModelLibrary/obj/Debug/net10.0/WordGuessingModelLibrary.dll
+/Users/aswin/Documents/vscode/Genspark/task_9_WordGuessing/WordGuessingModelLibrary/obj/Debug/net10.0/refint/WordGuessingModelLibrary.dll
+/Users/aswin/Documents/vscode/Genspark/task_9_WordGuessing/WordGuessingModelLibrary/obj/Debug/net10.0/WordGuessingModelLibrary.pdb
+/Users/aswin/Documents/vscode/Genspark/task_9_WordGuessing/WordGuessingModelLibrary/obj/Debug/net10.0/ref/WordGuessingModelLibrary.dll

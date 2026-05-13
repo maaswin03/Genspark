@@ -244,11 +244,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingFEApplication/WordGuessingFEApplication.csproj",
+      "projectUniqueName": "/Users/aswin/Documents/vscode/Genspark/task_9_WordGuessing/WordGuessingFEApplication/WordGuessingFEApplication.csproj",
       "projectName": "WordGuessingFEApplication",
-      "projectPath": "/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingFEApplication/WordGuessingFEApplication.csproj",
+      "projectPath": "/Users/aswin/Documents/vscode/Genspark/task_9_WordGuessing/WordGuessingFEApplication/WordGuessingFEApplication.csproj",
       "packagesPath": "/Users/aswin/.nuget/packages/",
-      "outputPath": "/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingFEApplication/obj/",
+      "outputPath": "/Users/aswin/Documents/vscode/Genspark/task_9_WordGuessing/WordGuessingFEApplication/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/aswin/.nuget/NuGet/NuGet.Config"
@@ -263,11 +263,11 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "projectReferences": {
-            "/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingBLLibrary/WordGuessingBLLibrary.csproj": {
-              "projectPath": "/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingBLLibrary/WordGuessingBLLibrary.csproj"
+            "/Users/aswin/Documents/vscode/Genspark/task_9_WordGuessing/WordGuessingBLLibrary/WordGuessingBLLibrary.csproj": {
+              "projectPath": "/Users/aswin/Documents/vscode/Genspark/task_9_WordGuessing/WordGuessingBLLibrary/WordGuessingBLLibrary.csproj"
             },
-            "/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingModelLibrary/WordGuessingModelLibrary.csproj": {
-              "projectPath": "/Users/aswin/Documents/vscode/task_9_WordGuessing/WordGuessingModelLibrary/WordGuessingModelLibrary.csproj"
+            "/Users/aswin/Documents/vscode/Genspark/task_9_WordGuessing/WordGuessingModelLibrary/WordGuessingModelLibrary.csproj": {
+              "projectPath": "/Users/aswin/Documents/vscode/Genspark/task_9_WordGuessing/WordGuessingModelLibrary/WordGuessingModelLibrary.csproj"
             }
           }
         }
