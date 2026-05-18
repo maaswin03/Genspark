@@ -1,0 +1,17 @@
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemBLLibrary/bin/Debug/net10.0/LendingSystemBLLibrary.deps.json
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemBLLibrary/bin/Debug/net10.0/LendingSystemBLLibrary.dll
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemBLLibrary/bin/Debug/net10.0/LendingSystemBLLibrary.pdb
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemBLLibrary/bin/Debug/net10.0/LendingSystemDALLibrary.dll
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemBLLibrary/bin/Debug/net10.0/LendingSystemModelLibrary.dll
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemBLLibrary/bin/Debug/net10.0/LendingSystemModelLibrary.pdb
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemBLLibrary/bin/Debug/net10.0/LendingSystemDALLibrary.pdb
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemBLLibrary/obj/Debug/net10.0/LendingSystemBLLibrary.csproj.AssemblyReference.cache
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemBLLibrary/obj/Debug/net10.0/LendingSystemBLLibrary.GeneratedMSBuildEditorConfig.editorconfig
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemBLLibrary/obj/Debug/net10.0/LendingSystemBLLibrary.AssemblyInfoInputs.cache
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemBLLibrary/obj/Debug/net10.0/LendingSystemBLLibrary.AssemblyInfo.cs
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemBLLibrary/obj/Debug/net10.0/LendingSystemBLLibrary.csproj.CoreCompileInputs.cache
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemBLLibrary/obj/Debug/net10.0/LendingS.FDE66604.Up2Date
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemBLLibrary/obj/Debug/net10.0/LendingSystemBLLibrary.dll
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemBLLibrary/obj/Debug/net10.0/refint/LendingSystemBLLibrary.dll
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemBLLibrary/obj/Debug/net10.0/LendingSystemBLLibrary.pdb
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemBLLibrary/obj/Debug/net10.0/ref/LendingSystemBLLibrary.dll

@@ -1,0 +1,101 @@
+Tables
+
+Member
+1. memberId - int pk
+2. Name - string
+3. Email - string
+4. Phone Number - string
+5. IsActive - bool
+6. MembershipTypeId - int fk
+7. CreatedAt - timestamp
+
+MembershipType
+1. MembershipTypeId - int pk
+2. TypeName - string
+3. MaxBorrowLimit - int
+4. MaxBorrowDays - int 
+
+Book
+1. bookid - int pk
+2. Title - string
+3. ISBN - string
+4. CategoryId - int fk
+5. Author - string
+6. PublishedYear - int 
+
+BookCopies
+1. BookCopyId - int pk
+2. BookId - int fk
+3. Status - enum - borrowed , available , damaged
+4. CreatedAt - timestamp
+
+BookCategory
+1. CategoryId - int pk
+2. CategoryName - string 
+
+BookDamageReport
+1. DamageReportId - int pk
+2. BorrowingId - int fk
+3. fineId - int fk
+4. Description - string
+5. ReportedAt - timestamp
+6. IsResolved - bool
+
+Borrowing
+1. BorrowingId - int  pk
+2. MemberId - int  fk
+3. BookCopyId - int fk
+4. BorrowDate - timestamp
+5. DueDate - timestamp
+6. ReturnDate - timestamp nullable
+7. BorrowStatus  - enum(borrowed , returned )
+
+Fine
+1. FineId - int pk
+2. BorrowingId - int fk nullable
+3. MemberId - int fk
+4. Amount - decimal / numeric
+5. FineReason - enum  - LateReturn / Damage / Lost
+6. IsPaid -  bool 
+7. CreatedAt - timestamp
+8. PaidAt - timestamp nullable
+
+FinePayment
+1. PaymentId - int pk
+2. FineId - int fk
+3. AmountPaid - Numeric
+4. PaymentMethod - enum - card / upi / wallet
+5. CreatedAt - timestamp
+
+
+
+Store Procedures
+
+Borrow Book
+1. Their membership is inactive
+2. They already reached the borrowing limit
+3. The book copy is not available
+4. They have unpaid fines above ₹500
+5. They already borrowed the same book and have not returned it
+6. If success update bookCopies ,  insert in borrowing
+
+Return Rules
+1. The system should calculate late return fine
+2. Fine amount = ₹10 per delayed day
+3. The returned book copy should become available again
+4. Borrowing status should change to returned
+5. Return date should be saved
+6. Update book copies and borrowing and insert in fines if available
+
+
+Functions
+1. calculate_member_fine(member_id) - for calculating fine
+2. get_available_books_by_category(category_id) - for returning available books by category
+3. get_member_borrowing_summary(member_id) -  for returning member borrowing summary
+
+
+
+
+
+
+

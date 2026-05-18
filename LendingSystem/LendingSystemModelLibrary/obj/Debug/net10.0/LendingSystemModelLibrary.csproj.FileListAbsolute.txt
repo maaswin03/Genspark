@@ -1,0 +1,11 @@
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemModelLibrary/bin/Debug/net10.0/LendingSystemModelLibrary.deps.json
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemModelLibrary/bin/Debug/net10.0/LendingSystemModelLibrary.dll
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemModelLibrary/bin/Debug/net10.0/LendingSystemModelLibrary.pdb
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemModelLibrary/obj/Debug/net10.0/LendingSystemModelLibrary.GeneratedMSBuildEditorConfig.editorconfig
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemModelLibrary/obj/Debug/net10.0/LendingSystemModelLibrary.AssemblyInfoInputs.cache
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemModelLibrary/obj/Debug/net10.0/LendingSystemModelLibrary.AssemblyInfo.cs
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemModelLibrary/obj/Debug/net10.0/LendingSystemModelLibrary.csproj.CoreCompileInputs.cache
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemModelLibrary/obj/Debug/net10.0/LendingSystemModelLibrary.dll
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemModelLibrary/obj/Debug/net10.0/refint/LendingSystemModelLibrary.dll
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemModelLibrary/obj/Debug/net10.0/LendingSystemModelLibrary.pdb
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemModelLibrary/obj/Debug/net10.0/ref/LendingSystemModelLibrary.dll

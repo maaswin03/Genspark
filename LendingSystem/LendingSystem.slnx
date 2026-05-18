@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="LendingSystemBLLibrary/LendingSystemBLLibrary.csproj" />
+  <Project Path="LendingSystemDALLibrary/LendingSystemDALLibrary.csproj" />
+  <Project Path="LendingSystemFEApplication/LendingSystemFEApplication.csproj" />
+  <Project Path="LendingSystemModelLibrary/LendingSystemModelLibrary.csproj" />
+</Solution>

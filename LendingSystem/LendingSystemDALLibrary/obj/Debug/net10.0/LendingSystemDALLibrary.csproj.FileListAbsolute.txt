@@ -1,0 +1,17 @@
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemDALLibrary/bin/Debug/net10.0/LendingSystemDALLibrary.deps.json
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemDALLibrary/bin/Debug/net10.0/LendingSystemDALLibrary.runtimeconfig.json
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemDALLibrary/bin/Debug/net10.0/LendingSystemDALLibrary.dll
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemDALLibrary/bin/Debug/net10.0/LendingSystemDALLibrary.pdb
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemDALLibrary/bin/Debug/net10.0/LendingSystemModelLibrary.dll
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemDALLibrary/bin/Debug/net10.0/LendingSystemModelLibrary.pdb
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemDALLibrary/obj/Debug/net10.0/LendingSystemDALLibrary.csproj.AssemblyReference.cache
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemDALLibrary/obj/Debug/net10.0/LendingSystemDALLibrary.GeneratedMSBuildEditorConfig.editorconfig
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemDALLibrary/obj/Debug/net10.0/LendingSystemDALLibrary.AssemblyInfoInputs.cache
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemDALLibrary/obj/Debug/net10.0/LendingSystemDALLibrary.AssemblyInfo.cs
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemDALLibrary/obj/Debug/net10.0/LendingSystemDALLibrary.csproj.CoreCompileInputs.cache
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemDALLibrary/obj/Debug/net10.0/LendingS.5C5CD051.Up2Date
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemDALLibrary/obj/Debug/net10.0/LendingSystemDALLibrary.dll
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemDALLibrary/obj/Debug/net10.0/refint/LendingSystemDALLibrary.dll
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemDALLibrary/obj/Debug/net10.0/LendingSystemDALLibrary.pdb
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemDALLibrary/obj/Debug/net10.0/LendingSystemDALLibrary.genruntimeconfig.cache
+/Users/aswin/Documents/vscode/LendingSystem/LendingSystemDALLibrary/obj/Debug/net10.0/ref/LendingSystemDALLibrary.dll
