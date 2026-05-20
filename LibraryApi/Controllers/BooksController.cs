@@ -9,7 +9,7 @@ namespace LibraryApi.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        IBookService _service;
+        protected readonly IBookService _service;
 
         public BooksController(IBookService service)
         {
@@ -23,17 +23,11 @@ namespace LibraryApi.Controllers
             try
             {
                 var result = _service.GetAllBooks(); //using book service getting the book values
-
-                if (result.Count == 0) //check any value is present 
-                {
-                    return NotFound();
-                }
-
                 return Ok(result);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return BadRequest(e.Message);
+                return StatusCode(500, "INTERNAL SERVER ERROR");
             }
         }
 
@@ -52,9 +46,9 @@ namespace LibraryApi.Controllers
 
                 return Ok(result);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return BadRequest(e.Message);
+                return StatusCode(500, "INTERNAL SERVER ERROR");
             }
         }
 
@@ -72,9 +66,9 @@ namespace LibraryApi.Controllers
             {
                 return BadRequest(e.Message);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return BadRequest(e.Message);
+                return StatusCode(500, "INTERNAL SERVER ERROR");
             }
         }
 
@@ -93,9 +87,9 @@ namespace LibraryApi.Controllers
 
                 return Ok(result);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return BadRequest(e.Message);
+                return StatusCode(500, "INTERNAL SERVER ERROR");
             }
         }
     }

@@ -6,7 +6,7 @@ namespace LibraryApi.Services
 {
     public class BookService : IBookService
     {
-        IBookRepository _bookrepo;
+        protected readonly IBookRepository _bookrepo;
 
         public BookService(IBookRepository repository)
         {
@@ -14,12 +14,9 @@ namespace LibraryApi.Services
         }
 
         //method for creating a new book
-        public Book? CreateBook(Book book)
+        public Book CreateBook(Book book)
         {
-            if (!ValidateBook(book))
-            {
-                return null;
-            }
+            ValidateBook(book);
             book.Title = book.Title.ToUpper();
             book.Author = book.Author.ToUpper();
             var result = _bookrepo.Create(book);
@@ -45,7 +42,7 @@ namespace LibraryApi.Services
         }
 
         //method for validating the book
-        public bool ValidateBook(Book book)
+        public void ValidateBook(Book book)
         {
             bool isbnExists = _bookrepo.GetAll().Any(b => b.Isbn == book.Isbn);
             bool BookidExists = _bookrepo.GetById(book.BookId) != null;
@@ -78,7 +75,6 @@ namespace LibraryApi.Services
             {
                 throw new InvalidInputException("OOPS, ISBN ALREADY EXISTS FOR OTHER BOOK");
             }
-            return true;
         }
     }
 }

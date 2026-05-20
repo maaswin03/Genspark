@@ -6,7 +6,7 @@ namespace LibraryApi.Repositories
 {
     public class BookRepository : IBookRepository
     {
-        protected LibraryDbContext _context;
+        protected readonly LibraryDbContext _context;
 
         public BookRepository(LibraryDbContext context)
         {

@@ -4,7 +4,7 @@ namespace LibraryApi.Interfaces
 {
     public interface IBookService
     {
-        Book? CreateBook(Book book); //method for creating new book
+        Book CreateBook(Book book); //method for creating new book
 
         List<Book> GetAllBooks(); //method for getting all the books
 

@@ -6,7 +6,7 @@ namespace LibraryApi.Repositories
 {
     public class MemberRepository : IRepository<int, Member>
     {
-        protected LibraryDbContext _context;
+        protected readonly LibraryDbContext _context;
 
         public MemberRepository(LibraryDbContext context)
         {

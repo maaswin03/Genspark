@@ -1,16 +1,15 @@
 using LibraryApi.Interfaces;
 using LibraryApi.Misc;
 using LibraryApi.Models;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryApi.Controllers
 {
-    [Microsoft.AspNetCore.Mvc.Route("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class MembersController : ControllerBase
     {
-        IMemberService _service;
+        protected readonly IMemberService _service;
 
         public MembersController(IMemberService service)
         {
@@ -24,17 +23,11 @@ namespace LibraryApi.Controllers
             try
             {
                 var result = _service.GetAllMembers(); //service used for fetching all the member details
-
-                if (result.Count == 0)
-                {
-                    return NotFound();
-                }
-
                 return Ok(result);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return BadRequest(e.Message);
+                return StatusCode(500, "INTERNAL SERVER ERROR");
             }
         }
 
@@ -53,9 +46,9 @@ namespace LibraryApi.Controllers
 
                 return Ok(result);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return BadRequest(e.Message);
+                return StatusCode(500, "INTERNAL SERVER ERROR");
             }
         }
 
@@ -73,9 +66,9 @@ namespace LibraryApi.Controllers
             {
                 return BadRequest(e.Message);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return BadRequest(e.Message);
+                return StatusCode(500, "INTERNAL SERVER ERROR");
             }
         }
     }

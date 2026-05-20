@@ -6,7 +6,7 @@ namespace LibraryApi.Services
 {
     public class MemberService : IMemberService
     {
-        IRepository<int, Member> _memberrepo;
+        protected readonly IRepository<int, Member> _memberrepo;
 
         public MemberService(IRepository<int, Member> repository)
         {
@@ -14,12 +14,9 @@ namespace LibraryApi.Services
         }
 
         //method for creating a new member
-        public Member? CreateMember(Member member)
+        public Member CreateMember(Member member)
         {
-            if (!ValidateMember(member))
-            {
-                return null;
-            }
+            ValidateMember(member);
             member.FullName = member.FullName.ToUpper();
             member.Email = member.Email.ToLower();
             member.MembershipDate = DateTime.UtcNow;
@@ -40,7 +37,7 @@ namespace LibraryApi.Services
         }
 
         //method for validating member details
-        public bool ValidateMember(Member member)
+        public void ValidateMember(Member member)
         {
             var result = _memberrepo.GetAll();
             bool EmailExists = result.Any(m => m.Email == member.Email);
@@ -67,7 +64,6 @@ namespace LibraryApi.Services
             {
                 throw new InvalidInputException("PLEASE ENTER A VALID PHONE NUMBER");
             }
-            return true;
         }
     }
 }
