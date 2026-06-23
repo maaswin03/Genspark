@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "W9sLYAnedhs=",
+  "dgSpecHash": "SRyYVEgQ4gk=",
   "success": true,
-  "projectFilePath": "/Users/aswin/Documents/vscode/LibraryApi/LibraryApi.csproj",
+  "projectFilePath": "/Users/aswin/Documents/vscode/Genspark/LibraryApi/LibraryApi.csproj",
   "expectedPackageFiles": [
     "/Users/aswin/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/Users/aswin/.nuget/packages/microsoft.aspnetcore.openapi/10.0.7/microsoft.aspnetcore.openapi.10.0.7.nupkg.sha512",

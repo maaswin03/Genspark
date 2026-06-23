@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/aswin/Documents/vscode/LibraryApi/LibraryApi.csproj": {}
+    "/Users/aswin/Documents/vscode/Genspark/LibraryApi/LibraryApi.csproj": {}
   },
   "projects": {
-    "/Users/aswin/Documents/vscode/LibraryApi/LibraryApi.csproj": {
+    "/Users/aswin/Documents/vscode/Genspark/LibraryApi/LibraryApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/aswin/Documents/vscode/LibraryApi/LibraryApi.csproj",
+        "projectUniqueName": "/Users/aswin/Documents/vscode/Genspark/LibraryApi/LibraryApi.csproj",
         "projectName": "LibraryApi",
-        "projectPath": "/Users/aswin/Documents/vscode/LibraryApi/LibraryApi.csproj",
+        "projectPath": "/Users/aswin/Documents/vscode/Genspark/LibraryApi/LibraryApi.csproj",
         "packagesPath": "/Users/aswin/.nuget/packages/",
-        "outputPath": "/Users/aswin/Documents/vscode/LibraryApi/obj/",
+        "outputPath": "/Users/aswin/Documents/vscode/Genspark/LibraryApi/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/aswin/.nuget/NuGet/NuGet.Config"
